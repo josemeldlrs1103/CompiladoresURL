@@ -1,9 +1,12 @@
 import fileRW 
 import lexer
 while True:
-    text = input('Ingrese la ruta del archivo a analizar\r\n>')
-    result, error = fileRW.read(text)
+    Text = input('Ingrese la ruta del archivo a analizar\r\n>')
+    Result, error = fileRW.read(Text)
     if error: 
         print(error)
-    else: 
-        lexer.Lexer('<stdin>',result)
+    else:
+        Lines = lexer.Lexer(Result)
+        SymbolTab= Lines.EvaluateLines()
+        for Element in SymbolTab:
+            print (Element)

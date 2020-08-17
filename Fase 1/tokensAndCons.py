@@ -57,3 +57,6 @@ TKN_SQRBRKT_R = 'T_RIGHT_SQUARE_BRACKET'
 TKN_BRKT      = 'T_BRACKETS'
 TKN_BRKT_L    = 'T_LEFT_BRACKETS'
 TKN_BRKT_R    = 'T_RIGHT_BRACKETS'
+
+#ExpresionesRegulares
+Reservadas = "(void|int|double|bool|string|class|const|interface|null|this|for|while|foreach|if|else|return|New|NewArray|Console|Writeline)"
