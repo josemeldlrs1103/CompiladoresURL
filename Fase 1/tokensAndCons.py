@@ -26,9 +26,9 @@ TKN_CONSOLE   = 'T_Console'
 TKN_WRITELINE = 'T_WriteLine'
 TKN_IDENTIFIER= 'T_identifier'
 #Comentarios
-TKN_CMT_LINE  = '//'
-TKN_CMT_OPEN  = '/*'
-TKN_CMT_CLOSE = '*/'
+TKN_CMT_LINE  = 'T_COMMENT_LINE'
+TKN_CMT_OPEN  = 'T_COMMENT_OPEN'
+TKN_CMT_CLOSE = 'T_COMMENT_CLOSE'
 #Operadores y caracteres
 TKN_PLUS      = 'T_PLUS'
 TKN_MINUS     = 'T_MINUS'
