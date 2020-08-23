@@ -60,3 +60,5 @@ TKN_BRKT_R    = 'T_RIGHT_BRACKETS'
 
 #ExpresionesRegulares
 Reservadas = "(void|int|double|bool|string|class|const|interface|null|this|for|while|foreach|if|else|return|New|NewArray|Console|Writeline)"
+ERParentesis = r'\([^()]*\)'
+ERCorchetes = r'\[[^()]*\]'

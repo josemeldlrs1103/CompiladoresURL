@@ -14,8 +14,8 @@ class Lexer:
         for Element in self.Text:
             PosS=0
             PosE=0
-            StringAux = ''
             while PosE < len(Element):
+                StringAux = ''
                 if Element[PosE] not in ' \n\t':
                     StringAux += Element[PosE]
                     if(re.search(tokensAndCons.Reservadas,StringAux)):
@@ -189,43 +189,48 @@ class Lexer:
                         TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_DOT))
                         StringAux = ''
                     elif (StringAux == '('):
-                        try:
-                            StringAux2 = StringAux + Element[PosE+1]
-                            if (StringAux2 == '()'):
-                                PosS = PosE+1
-                                PosE+=1
-                                TokensFounded.append(self.fillAux(StringAux2,LineN,PosS+1,PosE+1,tokensAndCons.TKN_PAREN))
-                                StringAux2 = ''
-                                StringAux = ''
-                            else:
+                        if (re.search(tokensAndCons.ERParentesis, Element)):
+                            try:
+                                StringAux2 = StringAux + Element[PosE+1]
+                                if (StringAux2 == '()'):
+                                    PosS = PosE+1
+                                    PosE+=1
+                                    TokensFounded.append(self.fillAux(StringAux2,LineN,PosS+1,PosE+1,tokensAndCons.TKN_PAREN))
+                                    StringAux2 = ''
+                                    StringAux = ''
+                                else:
+                                    PosS = PosE+1
+                                    TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_PAREN_L))
+                                    StringAux = ''
+                            except:
                                 PosS = PosE+1
                                 TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_PAREN_L))
                                 StringAux = ''
-                        except:
-                            PosS = PosE+1
-                            TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_PAREN_L))
-                            StringAux = ''
+                        #else:error, caracter esperado en linea x y columna x
                     elif (StringAux == ')'):
                         PosS = PosE+1
                         TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_PAREN_R))
                         StringAux = ''
                     elif (StringAux == '['):
-                        try:
-                            StringAux2 = StringAux + Element[PosE+1]
-                            if (StringAux2 == '[]'):
-                                PosS = PosE+1
-                                PosE+=1
-                                TokensFounded.append(self.fillAux(StringAux2,LineN,PosS+1,PosE+1,tokensAndCons.TKN_SQRBRKT))
-                                StringAux2 = ''
-                                StringAux = ''
-                            else:
+                        if (re.search(tokensAndCons.ERCorchetes, Element)):
+                            try:
+                                StringAux2 = StringAux + Element[PosE+1]
+                                if (StringAux2 == '[]'):
+                                    PosS = PosE+1
+                                    PosE+=1
+                                    TokensFounded.append(self.fillAux(StringAux2,LineN,PosS+1,PosE+1,tokensAndCons.TKN_SQRBRKT))
+                                    StringAux2 = ''
+                                    StringAux = ''
+                                else:
+                                    PosS = PosE+1
+                                    TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_SQRBRKT_L))
+                                    StringAux = ''
+                            except:
                                 PosS = PosE+1
                                 TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_SQRBRKT_L))
                                 StringAux = ''
-                        except:
-                            PosS = PosE+1
-                            TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_SQRBRKT_L))
-                            StringAux = ''
+                        #else:error, caracter esperado en linea x y columna x
+
                     elif (StringAux == ']'):
                         PosS = PosE+1
                         TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_SQRBRKT_R))
