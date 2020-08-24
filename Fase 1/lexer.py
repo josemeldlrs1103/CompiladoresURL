@@ -85,30 +85,30 @@ class Lexer:
                                     StringAnalizer += Element[PosE]
                                 TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_'+LastRecognition))
                                 Prior=False
-                                if(StringAux!=' ' and StringAux!='\t' and StringAux!='\n'):
+                                if(StringAux!=' ' and StringAux!='\t' and StringAux!='\n' and StringAux!='+' and StringAux!='-' and StringAux!='*' and StringAux!='/' and StringAux!='%' and StringAux!='<' and StringAux!='>' and StringAux!='=' and StringAux!='!' and StringAux!='&' and StringAux!='|' and StringAux!=';' and StringAux!=',' and StringAux!='.' and StringAux!='(' and StringAux!=')' and StringAux!='[' and StringAux!=']' and StringAux!='{' and StringAux!='}'):
                                     AnalizedChar = False
                         elif(LastRecognition == 'Identificador'):
                             TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_'+LastRecognition))
-                            if(StringAux!=' ' and StringAux!='\t' and StringAux!='\n'):
+                            if(StringAux!=' ' and StringAux!='\t' and StringAux!='\n' and StringAux!='+' and StringAux!='-' and StringAux!='*' and StringAux!='/' and StringAux!='%' and StringAux!='<' and StringAux!='>' and StringAux!='=' and StringAux!='!' and StringAux!='&' and StringAux!='|' and StringAux!=';' and StringAux!=',' and StringAux!='.' and StringAux!='(' and StringAux!=')' and StringAux!='[' and StringAux!=']' and StringAux!='{' and StringAux!='}'):
                                     AnalizedChar = False
                         elif(LastRecognition == 'Booleano'):
                             TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_'+StringAnalizer))
-                            if(StringAux!=' ' and StringAux!='\t' and StringAux!='\n'):
-                                    AnalizedChar = False
+                            if(StringAux!=' ' and StringAux!='\t' and StringAux!='\n' and StringAux!='+' and StringAux!='-' and StringAux!='*' and StringAux!='/' and StringAux!='%' and StringAux!='<' and StringAux!='>' and StringAux!='=' and StringAux!='!' and StringAux!='&' and StringAux!='|' and StringAux!=';' and StringAux!=',' and StringAux!='.' and StringAux!='(' and StringAux!=')' and StringAux!='[' and StringAux!=']' and StringAux!='{' and StringAux!='}'):
+                                 AnalizedChar = False
                         elif(LastRecognition == 'Integer'):
                             TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_'+StringAnalizer))
-                            if(StringAux!=' ' and StringAux!='\t' and StringAux!='\n'):
-                                    AnalizedChar = False
+                            if(StringAux!=' ' and StringAux!='\t' and StringAux!='\n' and StringAux!='+' and StringAux!='-' and StringAux!='*' and StringAux!='/' and StringAux!='%' and StringAux!='<' and StringAux!='>' and StringAux!='=' and StringAux!='!' and StringAux!='&' and StringAux!='|' and StringAux!=';' and StringAux!=',' and StringAux!='.' and StringAux!='(' and StringAux!=')' and StringAux!='[' and StringAux!=']' and StringAux!='{' and StringAux!='}'):
+                                AnalizedChar = False
                         elif(LastRecognition == 'Double'):
                             TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_'+StringAnalizer))
-                            if(StringAux!=' ' and StringAux!='\t' and StringAux!='\n'):
-                                    AnalizedChar = False
+                            if(StringAux!=' ' and StringAux!='\t' and StringAux!='\n' and StringAux!='+' and StringAux!='-' and StringAux!='*' and StringAux!='/' and StringAux!='%' and StringAux!='<' and StringAux!='>' and StringAux!='=' and StringAux!='!' and StringAux!='&' and StringAux!='|' and StringAux!=';' and StringAux!=',' and StringAux!='.' and StringAux!='(' and StringAux!=')' and StringAux!='[' and StringAux!=']' and StringAux!='{' and StringAux!='}'):
+                                AnalizedChar = False
                         elif(LastRecognition == 'Inicio Hex' or LastRecognition == 'Inicio dob'):
                             TokensFounded.append('***** Error encontrado en la línea ' + str(LineN) + ' ***** valor incompleto no permitido : ' + StringAnalizer)
-                            if(StringAux!=' ' and StringAux!='\t' and StringAux!='\n'):
-                                    AnalizedChar = False
+                            if(StringAux!=' ' and StringAux!='\t' and StringAux!='\n' and StringAux!='+' and StringAux!='-' and StringAux!='*' and StringAux!='/' and StringAux!='%' and StringAux!='<' and StringAux!='>' and StringAux!='=' and StringAux!='!' and StringAux!='&' and StringAux!='|' and StringAux!=';' and StringAux!=',' and StringAux!='.' and StringAux!='(' and StringAux!=')' and StringAux!='[' and StringAux!=']' and StringAux!='{' and StringAux!='}'):
+                                AnalizedChar = False
                     else:
-                        if(StringAux not in ' \n\t+-*/%<>=!&|;,.()[]\{\}'):
+                        if(StringAux not in ' \n\t+-*/%<>=!&|;,.()[]}{'):
                             TokensFounded.append('***** Error encontrado en la línea ' + str(LineN) + ' ***** caracter invalido encontrado: ' + StringAnalizer)
                             StringAnalizer=''
                     if (StringAnalizer != '\n'):
@@ -118,47 +118,42 @@ class Lexer:
                     else:
                         PosS = PosE+1               
                 if(Prior==True):
-                    if( LastRecognition == 'Reservada'):
-                            if(Prior == True):
-                                if(StringAux in ' \n\t'):
-                                    StringAnalizer += Element[PosE]
-                                TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_'+LastRecognition))
-                                Prior=False
-                                StringAnalizer=''
+                    if(StringAux in ' \n\t'):
+                        StringAnalizer += Element[PosE]
+                    TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_'+LastRecognition))
+                    Prior=False
+                    StringAnalizer=''
                 if (StringAux == '\n'):
                     if(StringAnalizer!='\n'):
                         StringAnalizer = StringAnalizer[:-1]
                     if( LastRecognition == 'Reservada'):
-                        if(Prior == True):
                             if(StringAux in ' \n\t'):
                                 StringAnalizer += Element[PosE]
-                            TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_'+LastRecognition))
-                            Prior=False
-                            if(StringAux!=' ' and StringAux!='\t' and StringAux!='\n'):
-                                    AnalizedChar = False
+                            if(StringAux!=' ' and StringAux!='\t' and StringAux!='\n' and StringAux!='+' and StringAux!='-' and StringAux!='*' and StringAux!='/' and StringAux!='%' and StringAux!='<' and StringAux!='>' and StringAux!='=' and StringAux!='!' and StringAux!='&' and StringAux!='|' and StringAux!=';' and StringAux!=',' and StringAux!='.' and StringAux!='(' and StringAux!=')' and StringAux!='[' and StringAux!=']' and StringAux!='{' and StringAux!='}'):
+                                TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_'+LastRecognition))
+                                AnalizedChar = False
                     elif(LastRecognition == 'Identificador'):
-                        TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_'+LastRecognition))
-                        if(StringAux!=' ' and StringAux!='\t' and StringAux!='\n'):
-                                    AnalizedChar = False
+                        if(StringAux!=' ' and StringAux!='\t' and StringAux!='\n' and StringAux!='+' and StringAux!='-' and StringAux!='*' and StringAux!='/' and StringAux!='%' and StringAux!='<' and StringAux!='>' and StringAux!='=' and StringAux!='!' and StringAux!='&' and StringAux!='|' and StringAux!=';' and StringAux!=',' and StringAux!='.' and StringAux!='(' and StringAux!=')' and StringAux!='[' and StringAux!=']' and StringAux!='{' and StringAux!='}'):
+                            TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_'+LastRecognition))
+                            AnalizedChar = False
                     elif(LastRecognition == 'Booleano'):
-                        TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_'+StringAnalizer))
-                        if(StringAux!=' ' and StringAux!='\t' and StringAux!='\n'):
-                                    AnalizedChar = False
-                    elif(LastRecognition == 'Integer'):
-                        TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_'+StringAnalizer))
-                        if(StringAux!=' ' and StringAux!='\t' and StringAux!='\n'):
-                                    AnalizedChar = False
-                    elif(LastRecognition == 'Double'):
-                        if(StringAnalizer!='\n'):
+                        if(StringAux!=' ' and StringAux!='\t' and StringAux!='\n' and StringAux!='+' and StringAux!='-' and StringAux!='*' and StringAux!='/' and StringAux!='%' and StringAux!='<' and StringAux!='>' and StringAux!='=' and StringAux!='!' and StringAux!='&' and StringAux!='|' and StringAux!=';' and StringAux!=',' and StringAux!='.' and StringAux!='(' and StringAux!=')' and StringAux!='[' and StringAux!=']' and StringAux!='{' and StringAux!='}'):
                             TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_'+StringAnalizer))
-                            if(StringAux!=' ' and StringAux!='\t' and StringAux!='\n'):
-                                    AnalizedChar = False
+                            AnalizedChar = False
+                    elif(LastRecognition == 'Integer'):
+                        if(StringAux!=' ' and StringAux!='\t' and StringAux!='\n' and StringAux!='+' and StringAux!='-' and StringAux!='*' and StringAux!='/' and StringAux!='%' and StringAux!='<' and StringAux!='>' and StringAux!='=' and StringAux!='!' and StringAux!='&' and StringAux!='|' and StringAux!=';' and StringAux!=',' and StringAux!='.' and StringAux!='(' and StringAux!=')' and StringAux!='[' and StringAux!=']' and StringAux!='{' and StringAux!='}'):
+                            TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_'+StringAnalizer))
+                            AnalizedChar = False
+                    elif(LastRecognition == 'Double'):
+                        if(StringAux!=' ' and StringAux!='\t' and StringAux!='\n' and StringAux!='+' and StringAux!='-' and StringAux!='*' and StringAux!='/' and StringAux!='%' and StringAux!='<' and StringAux!='>' and StringAux!='=' and StringAux!='!' and StringAux!='&' and StringAux!='|' and StringAux!=';' and StringAux!=',' and StringAux!='.' and StringAux!='(' and StringAux!=')' and StringAux!='[' and StringAux!=']' and StringAux!='{' and StringAux!='}'):
+                            TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_'+StringAnalizer))
+                            AnalizedChar = False
                     elif(LastRecognition == 'Inicio Hex' or LastRecognition == 'Inicio dob'):
                         TokensFounded.append('***** Error encontrado en la línea ' + str(LineN) + ' ***** valor incompleto no permitido : ' + StringAnalizer)
-                        if(StringAux!=' ' and StringAux!='\t' and StringAux!='\n'):
-                                    AnalizedChar = False
+                        if(StringAux!=' ' and StringAux!='\t' and StringAux!='\n' and StringAux!='+' and StringAux!='-' and StringAux!='*' and StringAux!='/' and StringAux!='%' and StringAux!='<' and StringAux!='>' and StringAux!='=' and StringAux!='!' and StringAux!='&' and StringAux!='|' and StringAux!=';' and StringAux!=',' and StringAux!='.' and StringAux!='(' and StringAux!=')' and StringAux!='[' and StringAux!=']' and StringAux!='{' and StringAux!='}'):
+                            AnalizedChar = False
                     else:
-                        if(StringAux not in ' \n\t+-*/%<>=!&|;,.()[]\{\}'):
+                        if(StringAux not in ' \n\t+-*/%<>=!&|;,.()[]}{'):
                             TokensFounded.append('***** Error encontrado en la línea ' + str(LineN) + ' ***** caracter invalido encontrado: ' + StringAnalizer)
                     StringAnalizer=''
                     if(StringAux not in ' \n\t'):
