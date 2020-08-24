@@ -175,7 +175,6 @@ class Lexer:
                             if (StringAux2 == '*/'):
                                 PosS = PosE+1
                                 PosE+=1
-                                TokensFounded.append(self.fillAux(StringAux2,LineN,PosS+1,PosE+1,tokensAndCons.TKN_CMT_CLOSE))
                                 StringAux2 = ''
                                 StringAux = ''
                             else:
@@ -192,13 +191,11 @@ class Lexer:
                             if (StringAux2 == '//'):
                                 PosS = PosE+1
                                 PosE+=1
-                                TokensFounded.append(self.fillAux(StringAux2,LineN,PosS+1,PosE+1,tokensAndCons.TKN_CMT_LINE))
                                 StringAux2 = ''
                                 StringAux = ''
                             elif (StringAux2 == '/*'):
                                 PosS = PosE+1
                                 PosE+=1
-                                TokensFounded.append(self.fillAux(StringAux2,LineN,PosS+1,PosE+1,tokensAndCons.TKN_CMT_OPEN))
                                 StringAux2 = ''
                                 StringAux = ''
                             else:
