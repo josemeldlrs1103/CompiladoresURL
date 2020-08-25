@@ -12,7 +12,8 @@ class Lexer:
     def EvaluateLines(self):
         TokensFounded=[]
         LineN=1
-        OpenString = False
+        StartLine = 0
+        OpenString = None
         for Element in self.Text:
             PosS=0
             PosE=0
@@ -77,6 +78,12 @@ class Lexer:
                 elif(re.search(tokensAndCons.TempDouble, StringAnalizer)):
                     AnalizedChar = True
                     LastRecognition = 'Inicio dob'
+                elif(re.search(tokensAndCons.StringStep1,StringAnalizer)):
+                    OpenString = True
+                    LastRecognition = 'String'
+                elif(re.search(tokensAndCons.StringStep2,StringAnalizer)):
+                    OpenString = False
+                    LastRecognition = 'String'
                 else:
                     if(len(StringAnalizer)>1 and LastRecognition!=''):
                         if(StringAnalizer!='\n'):
@@ -160,6 +167,16 @@ class Lexer:
                         PosS = PosE+1
                 if(AnalizedChar == False):
                     StringAux = ''
+                if(OpenString == False):
+                    Temp = StringAnalizer[1:-1]
+                    if('\n'not in Temp and '\"' not in Temp and chr(0) not in Temp):
+                        TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_String con el valor: '+StringAnalizer))
+                    else:
+                        TokensFounded.append('Error encontrado en línea ' + LineN + ', la cadena presente en la línea contiene un caracter no válido')
+                    StringAnalizer = ''
+                    OpenString = None
+                if(LastRecognition == 'String'):
+                    StringAux =''
                 if (StringAux == '+'):
                         PosS = PosE+1
                         TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_PLUS))
@@ -403,4 +420,6 @@ class Lexer:
                 else:
                     AnalizedChar=True
             LineN += 1
+        if(OpenString == True):
+            TokensFounded.append('***Error EOF en string*** la cadena iniciada en la línea ' + StartLine + ' nunca se cierra')
         return TokensFounded
