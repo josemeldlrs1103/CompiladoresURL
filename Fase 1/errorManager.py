@@ -1,9 +1,9 @@
 def incomplete (line, stringFound):
-    result = "*** Error encontrado en la línea: "+str(line) + " se encontro el valor incompleto nos válido: "+str(stringFound) +" ***"
+    result = "*** Error encontrado en la línea: "+str(line) + " se encontro el valor incompleto no es válido: "+str(stringFound) +" ***"
     return result
 
 def notValid (line, stringFound):
-    result = "*** Error encontrado en la línea: "+str(line) + " se encontro el caracter nos válido: "+str(stringFound) +" ***"
+    result = "*** Error encontrado en la línea: "+str(line) + " se encontro el caracter no es válido: "+str(stringFound) +" ***"
     return result
 
 def expected (line, col, open, close):
