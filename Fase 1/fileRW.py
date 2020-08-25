@@ -1,3 +1,4 @@
+import os
 def read(text):
     Extention = list(text)
     Error = None
@@ -13,3 +14,12 @@ def read(text):
     else:
         Error = 'Por favor ingrese una dirección'
     return Tokens, Error
+
+
+def write(Text, SymbolTab):
+    fileName = os.path.splitext(os.path.basename(Text))[0]
+    fileRoute = os.path.splitext(os.path.dirname(Text))[0]
+    file = open(fileRoute + "\\"+ fileName + ".out", "w")
+    for Element in SymbolTab:
+        file.write(Element+"\n")
+    file.close()

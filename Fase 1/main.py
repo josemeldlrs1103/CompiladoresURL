@@ -10,3 +10,4 @@ while True:
         SymbolTab= Lines.EvaluateLines()
         for Element in SymbolTab:
             print (Element)
+        fileRW.write(Text, SymbolTab)
