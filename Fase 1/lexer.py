@@ -118,6 +118,10 @@ class Lexer:
                     OpenComment = False
                     StringAnalizer = ''
                     AuxFlag = False
+                elif(re.search(tokensAndCons.ExtraCaseComment,StringAnalizer)):
+                    StringAnalizer = StringAnalizer[0:2]
+                    if(StringAux=='*' and Element[PosE+1]=='/'):
+                        StringAnalizer += Element[PosE]
                 else:
                     if(len(StringAnalizer)>1 and LastRecognition!=''):
                         if(StringAnalizer!='\n'):
@@ -478,9 +482,9 @@ class Lexer:
             if(OpenComment==True):
                 AuxFlag = True
         if(OpenString == True):
-            TokensFounded.append('***Error EOF en string*** la cadena iniciada en la línea ' + StringStart + ' nunca se cierra')
+            TokensFounded.append('***Error EOF en string*** la cadena iniciada en la línea ' + str(StringStart) + ' nunca se cierra')
             self.countError()
         if(OpenComment == True):
-            TokensFounded.append('***Error EOF en comentario*** la cadena iniciada en la línea ' + CommentStart + ' nunca se cierra')
+            TokensFounded.append('***Error EOF en comentario*** la cadena iniciada en la línea ' + str(CommentStart) + ' nunca se cierra')
             self.countError()
         return TokensFounded
