@@ -8,6 +8,11 @@ while True:
     else:
         Lines = lexer.Lexer(Result)
         SymbolTab= Lines.EvaluateLines()
+        ErrorQuantity = lexer.ErrorQuantity
+        if(ErrorQuantity != 0):
+            SymbolTab.append('El archivo cuenta con: ' + str(ErrorQuantity) + ' errores.')
+        else:
+            SymbolTab.append('El archivo no cuenta con errores.')
         for Element in SymbolTab:
             print (Element)
         fileRW.write(Text, SymbolTab)

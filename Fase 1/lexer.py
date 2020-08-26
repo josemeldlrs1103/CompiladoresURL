@@ -1,14 +1,22 @@
 import tokensAndCons
 import re
 import errorManager
+ErrorQuantity = 0
 class Lexer:
+
     def __init__(self,Text):
         self.Text = Text
     
     def fillAux (self, token, line, colStart, colEnd, tokenID):
         result = token + ' línea ' + str(line) + ' col ' + str(colStart) + '-' +str(colEnd) + ' es: ' + tokenID
         return result
+
+    def countError(self):
+        global ErrorQuantity
+        ErrorQuantity += 1
     
+
+
     def EvaluateLines(self):
         TokensFounded=[]
         LineN=1
@@ -114,11 +122,13 @@ class Lexer:
                                 AnalizedChar = False
                         elif(LastRecognition == 'Inicio Hex' or LastRecognition == 'Inicio dob'):
                             TokensFounded.append(errorManager.incomplete(LineN,StringAnalizer))
+                            self.countError()
                             if(StringAnalizer!='' and StringAnalizer!=' ' and StringAnalizer!='\t' and StringAnalizer!='\n' and StringAnalizer!='+' and StringAnalizer!='-' and StringAnalizer!='*' and StringAnalizer!='/' and StringAnalizer!='%' and StringAnalizer!='<' and StringAnalizer!='>' and StringAnalizer!='=' and StringAnalizer!='!' and StringAnalizer!='&' and StringAnalizer!='|' and StringAnalizer!=';' and StringAnalizer!=',' and StringAnalizer!='.' and StringAnalizer!='(' and StringAnalizer!=')' and StringAnalizer!='[' and StringAnalizer!=']' and StringAnalizer!='{' and StringAnalizer!='}'):
                                 AnalizedChar = False
                     else:
                         if(StringAux not in ' \n\t+-*/%<>=!&|;,.()[]}{'):
                             TokensFounded.append(errorManager.notValid(LineN,StringAnalizer))
+                            self.countError()
                             StringAnalizer=''
                     if (StringAnalizer != '\n'):
                         StringAnalizer=''
@@ -160,6 +170,7 @@ class Lexer:
                     else:
                         if(StringAux not in ' \n\t+-*/%<>=!&|;,.()[]}{'):
                             TokensFounded.append(errorManager.notValid(LineN,StringAnalizer))
+                            self.countError()
                     StringAnalizer=''
                     if(StringAux not in ' \n\t'):
                         PosS = PosE
@@ -173,6 +184,7 @@ class Lexer:
                         TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_String con el valor: '+StringAnalizer))
                     else:
                         TokensFounded.append('Error encontrado en línea ' + LineN + ', la cadena presente en la línea contiene un caracter no válido')
+                        self.countError()
                     StringAnalizer = ''
                     OpenString = None
                 if(LastRecognition == 'String'):
@@ -305,10 +317,12 @@ class Lexer:
                                 StringAux = ''
                             else:
                                 TokensFounded.append(errorManager.incomplete(LineN,StringAux))
+                                self.countError()
                                 PosS = PosE+1
                                 StringAux = ''
                         except:
                             TokensFounded.append(errorManager.incomplete(LineN,StringAux))
+                            self.countError()
                             PosS = PosE+1
                             StringAux = ''
                 elif (StringAux == '|'):
@@ -322,10 +336,12 @@ class Lexer:
                                 StringAux = ''
                             else:
                                 TokensFounded.append(errorManager.incomplete(LineN,StringAux))
+                                self.countError()
                                 PosS = PosE+1
                                 StringAux = ''
                         except:
                             TokensFounded.append(errorManager.incomplete(LineN,StringAux))
+                            self.countError()
                             PosS = PosE+1
                             StringAux = ''
                 elif (StringAux == ';'):
@@ -363,6 +379,7 @@ class Lexer:
                         else:
                             PosS = PosE+1
                             TokensFounded.append(errorManager.expected(LineN,PosS+1, '(', ')'))
+                            self.countError()
                             StringAux = ''
                 elif (StringAux == ')'):
                         PosS = PosE+1
@@ -389,6 +406,7 @@ class Lexer:
                         else:
                             PosS = PosE+1
                             TokensFounded.append(errorManager.expected(LineN,PosS+1, '[', ']'))
+                            self.countError()
                             StringAux = ''
                 elif (StringAux == ']'):
                         PosS = PosE+1
@@ -422,4 +440,5 @@ class Lexer:
             LineN += 1
         if(OpenString == True):
             TokensFounded.append('***Error EOF en string*** la cadena iniciada en la línea ' + StartLine + ' nunca se cierra')
+            self.countError()
         return TokensFounded
