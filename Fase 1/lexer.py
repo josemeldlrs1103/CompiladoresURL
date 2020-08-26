@@ -20,6 +20,10 @@ class Lexer:
     def EvaluateLines(self):
         TokensFounded=[]
         LineN=1
+        CountKeys=0
+        CountParenthesis = 0
+        CountKeys =0
+        CountSqKeys=0
         StringStart = 0
         CommentStart = 0
         OpenString = None
@@ -399,7 +403,7 @@ class Lexer:
                         TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_DOT))
                         StringAux = ''
                 elif (StringAux == '('):
-                    
+                        CountParenthesis+=1
                         if (re.search(tokensAndCons.ERParentesis, Element)):
                             try:
                                 StringAux2 = StringAux + Element[PosE+1]
@@ -423,10 +427,12 @@ class Lexer:
                             self.countError()
                             StringAux = ''
                 elif (StringAux == ')'):
+                        CountParenthesis-=1
                         PosS = PosE+1
                         TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_PAREN_R))
                         StringAux = ''
                 elif (StringAux == '['):
+                        CountSqKeys+=1
                         if (re.search(tokensAndCons.ERCorchetes, Element)):
                             try:
                                 StringAux2 = StringAux + Element[PosE+1]
@@ -450,10 +456,12 @@ class Lexer:
                             self.countError()
                             StringAux = ''
                 elif (StringAux == ']'):
+                        CountSqKeys-=1
                         PosS = PosE+1
                         TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_SQRBRKT_R))
                         StringAux = ''
                 elif (StringAux == '{'):
+                        CountKeys+=1
                         try:
                             StringAux2 = StringAux + Element[PosE+1]
                             if (StringAux2 == '{}'):
@@ -471,6 +479,7 @@ class Lexer:
                             TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_BRKT_L))
                             StringAux = ''
                 elif (StringAux == '}'):
+                        CountKeys-=1
                         PosS = PosE+1
                         TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_BRKT_R))
                         StringAux = ''
@@ -486,5 +495,14 @@ class Lexer:
             self.countError()
         if(OpenComment == True):
             TokensFounded.append('***Error EOF en comentario*** la cadena iniciada en la línea ' + str(CommentStart) + ' nunca se cierra')
+            self.countError()
+        if(CountParenthesis!=0):
+            TokensFounded.append('***Error*** los parentesis no se encuentran emparejados')
+            self.countError()
+        if(CountSqKeys!=0):
+            TokensFounded.append('***Error*** los corchetes no se encuentran emparejados')
+            self.countError()
+        if(CountKeys!=0):
+            TokensFounded.append('***Error*** las llaves no se encuentran emparejados')
             self.countError()
         return TokensFounded
