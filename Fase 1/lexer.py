@@ -20,13 +20,17 @@ class Lexer:
     def EvaluateLines(self):
         TokensFounded=[]
         LineN=1
-        StartLine = 0
+        StringStart = 0
+        CommentStart = 0
         OpenString = None
+        OpenComment = None
+        AuxFlag = False
         for Element in self.Text:
             PosS=0
             PosE=0
-            StringAnalizer=''
-            LastRecognition=''
+            if(AuxFlag==False):
+                StringAnalizer=''
+                LastRecognition=''
             Prior = None
             DecimalExist= False
             AnalizedChar =True
@@ -89,9 +93,30 @@ class Lexer:
                 elif(re.search(tokensAndCons.StringStep1,StringAnalizer)):
                     OpenString = True
                     LastRecognition = 'String'
+                    StringStart = LineN
                 elif(re.search(tokensAndCons.StringStep2,StringAnalizer)):
                     OpenString = False
                     LastRecognition = 'String'
+                elif(re.search(tokensAndCons.OneLineCommentsStep1, StringAnalizer)):
+                    if(Element[PosE+1]=='/'):
+                        LastRecognition = 'Comment Line'
+                    if(Element[PosE+1]=='*'):
+                        LastRecognition = 'Multi-Line Comment'
+                elif(re.search(tokensAndCons.OneLineCommentsStep2,StringAnalizer)):
+                    LastRecognition = 'Comment Line'
+                elif(re.search(tokensAndCons.MultiLineCommentsStep1, StringAnalizer)):
+                    if(LastRecognition != 'Multi-Line Comment'):
+                        if(Element[PosE+1]=='/'):
+                            LastRecognition = 'Multi-Line Comment'
+                    OpenComment =True
+                    CommentStart = LineN
+                elif(re.search(tokensAndCons.MultiLineCommentsStep2, StringAnalizer)):
+                    LastRecognition = 'Multi-Line Comment'
+                elif(re.search(tokensAndCons.MultiLineCommentsStep3, StringAnalizer)):
+                    LastRecognition = 'Multi-Line Comment'
+                    OpenComment = False
+                    StringAnalizer = ''
+                    AuxFlag = False
                 else:
                     if(len(StringAnalizer)>1 and LastRecognition!=''):
                         if(StringAnalizer!='\n'):
@@ -171,23 +196,26 @@ class Lexer:
                         if(StringAux not in ' \n\t+-*/%<>=!&|;,.()[]}{'):
                             TokensFounded.append(errorManager.notValid(LineN,StringAnalizer))
                             self.countError()
-                    StringAnalizer=''
+                    if (LastRecognition != 'Multi-Line Comment' and StringAnalizer!= '\n'):
+                        StringAnalizer=''
                     if(StringAux not in ' \n\t'):
                         PosS = PosE
                     else:
                         PosS = PosE+1
+                    if(LastRecognition== 'Comment Line'):
+                        StringAnalizer = ''
                 if(AnalizedChar == False):
                     StringAux = ''
                 if(OpenString == False):
                     Temp = StringAnalizer[1:-1]
-                    if('\n'not in Temp and '\"' not in Temp and chr(0) not in Temp):
+                    if('\"' not in Temp and chr(0) not in Temp):
                         TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_String con el valor: '+StringAnalizer))
                     else:
                         TokensFounded.append('Error encontrado en línea ' + LineN + ', la cadena presente en la línea contiene un caracter no válido')
                         self.countError()
                     StringAnalizer = ''
                     OpenString = None
-                if(LastRecognition == 'String'):
+                if(LastRecognition == 'String' or LastRecognition == 'Comment Line' or LastRecognition == 'Multi-Line Comment'):
                     StringAux =''
                 if (StringAux == '+'):
                         PosS = PosE+1
@@ -438,7 +466,12 @@ class Lexer:
                 else:
                     AnalizedChar=True
             LineN += 1
+            if(OpenComment==True):
+                AuxFlag = True
         if(OpenString == True):
-            TokensFounded.append('***Error EOF en string*** la cadena iniciada en la línea ' + StartLine + ' nunca se cierra')
+            TokensFounded.append('***Error EOF en string*** la cadena iniciada en la línea ' + StringStart + ' nunca se cierra')
+            self.countError()
+        if(OpenComment == True):
+            TokensFounded.append('***Error EOF en comentario*** la cadena iniciada en la línea ' + CommentStart + ' nunca se cierra')
             self.countError()
         return TokensFounded
