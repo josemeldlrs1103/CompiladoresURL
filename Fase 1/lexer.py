@@ -93,7 +93,17 @@ class Lexer:
                     LastRecognition = 'Double'
                     DecimalExist =True
                 elif(re.search(tokensAndCons.TempDouble, StringAnalizer)):
-                    AnalizedChar = True
+					if((PosE < len(Element)-3) and (Element[PosE+1] in '+-1234567890')):
+                        if(Element[PosE+1] in '1234567890'):
+                            AnalizedChar = True
+                        elif(Element[PosE+1] in '+-' and Element[PosE+2] in '1234567890'):
+                            AnalizedChar = True
+                        else:
+                            AnalizedChar =False
+                            Prior = True
+                    else:
+                        AnalizedChar = False
+                        Prior = True
                     LastRecognition = 'Inicio dob'
                 elif(re.search(tokensAndCons.StringStep1,StringAnalizer)):
                     OpenString = True
@@ -116,7 +126,7 @@ class Lexer:
                     OpenComment =True
                     CommentStart = LineN
                 elif(re.search(tokensAndCons.MultiLineCommentsStep2, StringAnalizer)):
-                    LastRecognition = 'Multi-Line Comment'
+                    LastRecognition = 'SCMulti-Line Comment'
                 elif(re.search(tokensAndCons.MultiLineCommentsStep3, StringAnalizer)):
                     LastRecognition = 'Multi-Line Comment'
                     OpenComment = False
@@ -124,6 +134,8 @@ class Lexer:
                     AuxFlag = False
                 elif(re.search(tokensAndCons.ExtraCaseComment,StringAnalizer)):
                     StringAnalizer = StringAnalizer[0:2]
+					if(LastRecognition == 'SCMulti-Line Comment'):
+                        StringAnalizer = '/**'
                     if(StringAux=='*' and Element[PosE+1]=='/'):
                         StringAnalizer += Element[PosE]
                 else:
@@ -175,7 +187,11 @@ class Lexer:
                     else:
                         PosS = PosE+1               
                 if(Prior==True):
-                    TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_'+LastRecognition))
+					if(LastRecognition == 'Reservada'):
+                        TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_'+LastRecognition))
+                    elif(LastRecognition == 'Inicio dob'):
+                        StringAnalizer = StringAnalizer[:-1]
+                        TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_Double con el valor: '+StringAnalizer))
                     Prior=False
                     StringAnalizer=''
                 if (StringAux == '\n'):
@@ -232,7 +248,7 @@ class Lexer:
                         self.countError()
                     StringAnalizer = ''
                     OpenString = None
-                if(LastRecognition == 'String' or LastRecognition == 'Comment Line' or LastRecognition == 'Multi-Line Comment'):
+                if(LastRecognition == 'String' or LastRecognition == 'Comment Line' or LastRecognition == 'Multi-Line Comment' or LastRecognition == 'SCMulti-Line Comment'):
                     StringAux =''
                 if (StringAux == '+'):
                         PosS = PosE+1
@@ -490,9 +506,11 @@ class Lexer:
             LineN += 1
             if(OpenComment==True):
                 AuxFlag = True
-        if(OpenString == True):
-            TokensFounded.append('***Error EOF en string*** la cadena iniciada en la línea ' + str(StringStart) + ' nunca se cierra')
-            self.countError()
+			if(OpenString == True):
+                TokensFounded.append('***Error EOF en string*** la cadena iniciada en la línea ' + str(StringStart) + ' nunca se cierra')
+                self.countError()
+                OpenString = None
+                LastRecognition =''
         if(OpenComment == True):
             TokensFounded.append('***Error EOF en comentario*** la cadena iniciada en la línea ' + str(CommentStart) + ' nunca se cierra')
             self.countError()
