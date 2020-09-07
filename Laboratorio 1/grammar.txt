@@ -1,0 +1,20 @@
+Program     	::= Decl+
+Decl 	    	::= Decl' Decl
+Decl'		    ::= Variable | Function
+VariableDecl 	::= Variable ;
+Variable 	    ::= Type ident
+Type 	    	::= int | double | bool | string | ident | Type []
+FunctionDecl 	::= FunctionDecl' ident (Formals) Stmt* 
+FunctionDecl'	::= Type | void
+Formals	        ::= Variable+ , | ε 
+Stmt 		    ::= IfStmt | WhileStmt | Expr ;
+IfStmt 	        ::= if (Expr) Stmt IfStmt'
+IfStmt'	        ::= else Stmt | ε
+WhileStmt   	::= while (Expr) Stmt
+Expr 		    ::= LValue = Expr | Constant | LValue | this | (Expr) |
+		        Expr + Expr | Expr - Expr | Expr * Expr | Expr / Expr |
+		        Expr % Expr | -Expr | Expr < Expr | Expr <= Expr |
+		        Expr > Expr | Expr >= Expr | Expr == Expr | Expr != Expr |
+		        Expr && Expr | Expr || Expr | !Expr | New(ident)
+LValue	    	::= ident | Expr.ident | Expr [Expr]
+Constant	    ::= intConstant | doubleConstant | boolConstant | stringConstant | null
