@@ -113,10 +113,11 @@ class Lexer:
                     OpenString = False
                     LastRecognition = 'String'
                 elif(re.search(tokensAndCons.OneLineCommentsStep1, StringAnalizer)):
-                    if(Element[PosE+1]=='/'):
-                        LastRecognition = 'Comment Line'
-                    if(Element[PosE+1]=='*'):
-                        LastRecognition = 'Multi-Line Comment'
+                    if(PosE>= (len(Element)-2)):
+                        if(Element[PosE+1]=='/'):
+                            LastRecognition = 'Comment Line'
+                        if(Element[PosE+1]=='*'):
+                            LastRecognition = 'Multi-Line Comment'
                 elif(re.search(tokensAndCons.OneLineCommentsStep2,StringAnalizer)):
                     LastRecognition = 'Comment Line'
                 elif(re.search(tokensAndCons.MultiLineCommentsStep1, StringAnalizer)):
@@ -133,11 +134,12 @@ class Lexer:
                     StringAnalizer = ''
                     AuxFlag = False
                 elif(re.search(tokensAndCons.ExtraCaseComment,StringAnalizer)):
-                    StringAnalizer = StringAnalizer[0:2]
-                    if(LastRecognition == 'SCMulti-Line Comment'):
-                        StringAnalizer = '/**'
-                    if(StringAux=='*' and Element[PosE+1]=='/'):
-                        StringAnalizer += Element[PosE]
+                    if(PosE <= (len(Element)-2)):
+                        StringAnalizer = StringAnalizer[0:2]
+                        if(StringAux=='*' and Element[PosE+1]=='/'):
+                          StringAnalizer += Element[PosE]
+                        if(LastRecognition == 'SCMulti-Line Comment'):
+                            StringAnalizer = '/**'
                 else:
                     if(len(StringAnalizer)>1 and LastRecognition!=''):
                         if(StringAnalizer!='\n'):
@@ -146,7 +148,7 @@ class Lexer:
                             if(Prior == True):
                                 if(StringAux in ' \n\t'):
                                     StringAnalizer += Element[PosE]
-                                TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_'+LastRecognition))
+                                TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_'+StringAnalizer))
                                 Prior=False
                                 if(StringAnalizer!='' and StringAnalizer!=' ' and StringAnalizer!='\t' and StringAnalizer!='\n' and StringAnalizer!='+' and StringAnalizer!='-' and StringAnalizer!='*' and StringAnalizer!='/' and StringAnalizer!='%' and StringAnalizer!='<' and StringAnalizer!='>' and StringAnalizer!='=' and StringAnalizer!='!' and StringAnalizer!='&' and StringAnalizer!='|' and StringAnalizer!=';' and StringAnalizer!=',' and StringAnalizer!='.' and StringAnalizer!='(' and StringAnalizer!=')' and StringAnalizer!='[' and StringAnalizer!=']' and StringAnalizer!='{' and StringAnalizer!='}'):
                                     AnalizedChar = False
@@ -159,15 +161,15 @@ class Lexer:
                                 DiscardChars = False
                                 LastRecognition = ''
                         elif(LastRecognition == 'Booleano'):
-                            TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_Boolean'+StringAnalizer))
+                            TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,tokensAndCons.TKN_BOOLCONST))
                             if(StringAnalizer!='' and StringAnalizer!=' ' and StringAnalizer!='\t' and StringAnalizer!='\n' and StringAnalizer!='+' and StringAnalizer!='-' and StringAnalizer!='*' and StringAnalizer!='/' and StringAnalizer!='%' and StringAnalizer!='<' and StringAnalizer!='>' and StringAnalizer!='=' and StringAnalizer!='!' and StringAnalizer!='&' and StringAnalizer!='|' and StringAnalizer!=';' and StringAnalizer!=',' and StringAnalizer!='.' and StringAnalizer!='(' and StringAnalizer!=')' and StringAnalizer!='[' and StringAnalizer!=']' and StringAnalizer!='{' and StringAnalizer!='}'):
                                  AnalizedChar = False
                         elif(LastRecognition == 'Integer'):
-                            TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_Int'+StringAnalizer))
+                            TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,tokensAndCons.TKN_INTCONST))
                             if(StringAnalizer!='' and StringAnalizer!=' ' and StringAnalizer!='\t' and StringAnalizer!='\n' and StringAnalizer!='+' and StringAnalizer!='-' and StringAnalizer!='*' and StringAnalizer!='/' and StringAnalizer!='%' and StringAnalizer!='<' and StringAnalizer!='>' and StringAnalizer!='=' and StringAnalizer!='!' and StringAnalizer!='&' and StringAnalizer!='|' and StringAnalizer!=';' and StringAnalizer!=',' and StringAnalizer!='.' and StringAnalizer!='(' and StringAnalizer!=')' and StringAnalizer!='[' and StringAnalizer!=']' and StringAnalizer!='{' and StringAnalizer!='}'):
                                 AnalizedChar = False
                         elif(LastRecognition == 'Double'):
-                            TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_Double'+StringAnalizer))
+                            TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,tokensAndCons.TKN_DOUBCONST))
                             if(StringAnalizer!='' and StringAnalizer!=' ' and StringAnalizer!='\t' and StringAnalizer!='\n' and StringAnalizer!='+' and StringAnalizer!='-' and StringAnalizer!='*' and StringAnalizer!='/' and StringAnalizer!='%' and StringAnalizer!='<' and StringAnalizer!='>' and StringAnalizer!='=' and StringAnalizer!='!' and StringAnalizer!='&' and StringAnalizer!='|' and StringAnalizer!=';' and StringAnalizer!=',' and StringAnalizer!='.' and StringAnalizer!='(' and StringAnalizer!=')' and StringAnalizer!='[' and StringAnalizer!=']' and StringAnalizer!='{' and StringAnalizer!='}'):
                                 AnalizedChar = False
                         elif(LastRecognition == 'Inicio Hex' or LastRecognition == 'Inicio dob'):
@@ -176,7 +178,7 @@ class Lexer:
                             if(StringAnalizer!='' and StringAnalizer!=' ' and StringAnalizer!='\t' and StringAnalizer!='\n' and StringAnalizer!='+' and StringAnalizer!='-' and StringAnalizer!='*' and StringAnalizer!='/' and StringAnalizer!='%' and StringAnalizer!='<' and StringAnalizer!='>' and StringAnalizer!='=' and StringAnalizer!='!' and StringAnalizer!='&' and StringAnalizer!='|' and StringAnalizer!=';' and StringAnalizer!=',' and StringAnalizer!='.' and StringAnalizer!='(' and StringAnalizer!=')' and StringAnalizer!='[' and StringAnalizer!=']' and StringAnalizer!='{' and StringAnalizer!='}'):
                                 AnalizedChar = False
                     else:
-                        if(StringAux not in ' \n\t+-*/%<>=!&|;,.()[]}{'):
+                        if(StringAux not in ' \n\t:+-*/%<>=!&|;,.()[]}{'):
                             TokensFounded.append(errorManager.notValid(LineN,StringAnalizer))
                             self.countError()
                             StringAnalizer=''
@@ -199,7 +201,7 @@ class Lexer:
                         StringAnalizer = StringAnalizer[:-1]
                     if( LastRecognition == 'Reservada'):
                             if(StringAnalizer!='' and StringAnalizer!=' ' and StringAnalizer!='\t' and StringAnalizer!='\n' and StringAnalizer!='+' and StringAnalizer!='-' and StringAnalizer!='*' and StringAnalizer!='/' and StringAnalizer!='%' and StringAnalizer!='<' and StringAnalizer!='>' and StringAnalizer!='=' and StringAnalizer!='!' and StringAnalizer!='&' and StringAnalizer!='|' and StringAnalizer!=';' and StringAnalizer!=',' and StringAnalizer!='.' and StringAnalizer!='(' and StringAnalizer!=')' and StringAnalizer!='[' and StringAnalizer!=']' and StringAnalizer!='{' and StringAnalizer!='}'):
-                                TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_'+LastRecognition))
+                                TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_'+StringAnalizer))
                                 AnalizedChar = False
                     elif(LastRecognition == 'Identificador'):
                         if(DiscardChars==False):
@@ -211,15 +213,15 @@ class Lexer:
                                 LastRecognition = ''
                     elif(LastRecognition == 'Booleano'):
                         if(StringAnalizer!='' and StringAnalizer!=' ' and StringAnalizer!='\t' and StringAnalizer!='\n' and StringAnalizer!='+' and StringAnalizer!='-' and StringAnalizer!='*' and StringAnalizer!='/' and StringAnalizer!='%' and StringAnalizer!='<' and StringAnalizer!='>' and StringAnalizer!='=' and StringAnalizer!='!' and StringAnalizer!='&' and StringAnalizer!='|' and StringAnalizer!=';' and StringAnalizer!=',' and StringAnalizer!='.' and StringAnalizer!='(' and StringAnalizer!=')' and StringAnalizer!='[' and StringAnalizer!=']' and StringAnalizer!='{' and StringAnalizer!='}'):
-                            TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_Boolean'+StringAnalizer))
+                            TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,tokensAndCons.TKN_BOOLCONST))
                             AnalizedChar = False
                     elif(LastRecognition == 'Integer'):
                         if(StringAnalizer!='' and StringAnalizer!=' ' and StringAnalizer!='\t' and StringAnalizer!='\n' and StringAnalizer!='+' and StringAnalizer!='-' and StringAnalizer!='*' and StringAnalizer!='/' and StringAnalizer!='%' and StringAnalizer!='<' and StringAnalizer!='>' and StringAnalizer!='=' and StringAnalizer!='!' and StringAnalizer!='&' and StringAnalizer!='|' and StringAnalizer!=';' and StringAnalizer!=',' and StringAnalizer!='.' and StringAnalizer!='(' and StringAnalizer!=')' and StringAnalizer!='[' and StringAnalizer!=']' and StringAnalizer!='{' and StringAnalizer!='}'):
-                            TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_Int'+StringAnalizer))
+                            TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,tokensAndCons.TKN_INTCONST))
                             AnalizedChar = False
                     elif(LastRecognition == 'Double'):
                         if(StringAnalizer!='' and StringAnalizer!=' ' and StringAnalizer!='\t' and StringAnalizer!='\n' and StringAnalizer!='+' and StringAnalizer!='-' and StringAnalizer!='*' and StringAnalizer!='/' and StringAnalizer!='%' and StringAnalizer!='<' and StringAnalizer!='>' and StringAnalizer!='=' and StringAnalizer!='!' and StringAnalizer!='&' and StringAnalizer!='|' and StringAnalizer!=';' and StringAnalizer!=',' and StringAnalizer!='.' and StringAnalizer!='(' and StringAnalizer!=')' and StringAnalizer!='[' and StringAnalizer!=']' and StringAnalizer!='{' and StringAnalizer!='}'):
-                            TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_Double'+StringAnalizer))
+                            TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,tokensAndCons.TKN_DOUBCONST))
                             AnalizedChar = False
                     elif(LastRecognition == 'Inicio Hex' or LastRecognition == 'Inicio dob'):
                         TokensFounded.append(errorManager.incomplete(LineN,StringAnalizer))
@@ -405,6 +407,10 @@ class Lexer:
                             self.countError()
                             PosS = PosE+1
                             StringAux = ''
+                elif (StringAux == ':'):
+                    PosS = PosE+1
+                    TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_COLON))
+                    StringAux = ''
                 elif (StringAux == ';'):
                         PosS = PosE+1
                         TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_SEMICOLON))
