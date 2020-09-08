@@ -1,6 +1,6 @@
 import fileRW 
 import lexer
-
+import parserCls
 while True:
     Text = input('Ingrese la ruta del archivo a analizar\r\n>')
     Result, error = fileRW.read(Text)
@@ -17,3 +17,6 @@ while True:
         for Element in SymbolTab:
             print (Element)
         fileRW.write(Text, SymbolTab)
+    ## esto de abajo es para probar el funcionamineto del paso de parametros, borrar luego
+    p1 = parserCls.ParserCls(SymbolTab)
+    p2 = p1.TypeR()
