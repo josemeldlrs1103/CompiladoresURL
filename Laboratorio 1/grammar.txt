@@ -1,10 +1,12 @@
 Program				::= Decl Program'
 Program'			::= Program' | ε
 Decl 	    		::= Decl' Decl
-Decl'		    	::= Variable | Function
+Decl'		    	::= Variable | FunctionDecl
 VariableDecl 		::= Variable ;
-Variable 	    	::= Type ident
-Type 	    		::= int | double | bool | string | ident | Type []
+Variable 	    	::= TypeA ident
+TypeA				::= Type Array
+Array				::= [] | ε 
+Type 	    		::= int | double | bool | string | ident 
 FunctionDecl 		::= FunctionDecl' ident (Formals) Stmt
 FunctionDecl'		::= Type | void
 Formals	        	::= Variable Formals' , | ε 
