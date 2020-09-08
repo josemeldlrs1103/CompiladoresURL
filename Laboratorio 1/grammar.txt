@@ -5,16 +5,14 @@ Decl'		    	::= Variable | Function
 VariableDecl 		::= Variable ;
 Variable 	    	::= Type ident
 Type 	    		::= int | double | bool | string | ident | Type []
-FunctionDecl 		::= FunctionDecl' ident (Formals) FunctionStmt
-FunctionStmt 		::= Stmt | ε
+FunctionDecl 		::= FunctionDecl' ident (Formals) Stmt
 FunctionDecl'		::= Type | void
 Formals	        	::= Variable Formals' , | ε 
 Formals'			::=	Variable | ε
-Stmt 		    	::= IfStmt | WhileStmt | Expr ;
+Stmt 		    	::= IfStmt | WhileStmt | Expr ; | ε 
 IfStmt 	       		::= if (Expr) Stmt IfStmt'
 IfStmt'	       		::= else Stmt | ε
 WhileStmt   		::= while (Expr) Stmt
-
 Expr 	        	::= LValue = Expr | Constant | LValue | this | New(ident) | ExprOr
 ExprOr				::= ExprAnd ExprOr'
 EsprOr' 			::= || ExprAnd ExprOr' | ε
@@ -31,6 +29,5 @@ ExprMul'	        ::= * ExprPre ExprMul' | / ExprMul ExprAdd' | % ExprMul ExprAdd
 ExprPre				::= ExprParen ExprPre'
 ExprPre'			::= - ExprParen ExprPre' | ! ExprParen ExprPre' | ε
 ExprParen			::= (Expr) | ε
-
 LValue	    		::= ident | Expr.ident | Expr [Expr]
 Constant	    	::= intConstant | doubleConstant | boolConstant | stringConstant | null
