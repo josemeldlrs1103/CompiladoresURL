@@ -35,8 +35,8 @@ class ParserCls:
     
 
     ### reglas de produccion ###
-    def TypeR (self):
-        token = self.currentToken
-        if token in (tokensAndCons.TKN_INT, tokensAndCons.TKN_DOUBLE, tokensAndCons.TKN_BOOLEAN, tokensAndCons.TKN_STRING, tokensAndCons.TKN_IDENTIFIER):
-            self.next()
-            return TypeVariable(token)
+    #def TypeR (self):
+        #token = self.currentToken
+        #if token in (tokensAndCons.TKN_INT, tokensAndCons.TKN_DOUBLE, tokensAndCons.TKN_BOOLEAN, tokensAndCons.TKN_STRING, tokensAndCons.TKN_IDENTIFIER):
+            #self.next()
+            #return TypeVariable(token)
