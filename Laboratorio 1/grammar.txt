@@ -15,7 +15,7 @@ Stmt 		    	::= IfStmt | WhileStmt | Expr ; | ε
 IfStmt 	       		::= if (Expr) Stmt IfStmt'
 IfStmt'	       		::= else Stmt | ε
 WhileStmt   		::= while (Expr) Stmt
-Expr 	        	::= Constant | LValue | this | New(ident) | ExprOr | LValue = Expr 
+Expr 	        	::= Constant | this | New(ident) | ExprOr | LValue
 ExprOr				::= ExprAnd ExprOr'
 EsprOr' 			::= || ExprAnd ExprOr' | ε
 ExprAnd				::= ExprEquals ExprAnd'
@@ -31,5 +31,7 @@ ExprMul'	        ::= * ExprPre ExprMul' | / ExprMul ExprAdd' | % ExprMul ExprAdd
 ExprPre				::= ExprParen ExprPre'
 ExprPre'			::= - ExprParen ExprPre' | ! ExprParen ExprPre' | ε
 ExprParen			::= (Expr) | ε
-LValue	    		::= ident | Expr.ident | Expr [Expr]
+LValue	    		::= LValue' LValueExpr
+LValue'             ::= ident | Expr.ident | Expr [Expr] | ε
+LValueExpr          ::= LValue = Expr | ε
 Constant	    	::= intConstant | doubleConstant | boolConstant | stringConstant | null
