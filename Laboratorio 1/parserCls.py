@@ -41,40 +41,88 @@ class ParserCls:
 
     ### reglas de produccion ###
     def ProgramVoid(self):
-        self.DeclVoid()
-        self.ProgramVoid_Prime()
+        if self.index < len(self.tokenList):        
+            self.DeclVoid()
+            self.ProgramVoid_Prime()
+
+    def ProgramVoid_Prime(self):
+        if self.index < len(self.tokenList):        
+            self.next()
+            #se vuelve a program ya que aun hay elementos en la lista de tokens
+            self.ProgramVoid()
+        else:
+            #se detecta epsilon
+            return
 
     def DeclVoid(self):
-        #si hay tokens por evaluar
-        self.DeclVoid_Prime()
-        #si no terminar ejecucion
+        if self.index < len(self.tokenList):        
+            self.DeclVoid_Prime()
+            self.DeclVoid()
+        
+    def DeclVoid_Prime(self):
+        if self.index < len(self.tokenList): 
+            # se crea un token temporal para evaluar que venga un ';'       
+            tempToken = self.tokenList[self.index + 2]
+            if tempToken in (tokensAndCons.TKN_SEMICOLON):
+                self.VariableDeclVoid()
+            elif tempToken in (tokensAndCons.TKN_PAREN_L):
+                self.FunctionDeclVoid()
+    def FunctionDeclVoid(self):
+        self.FunctionDeclVoid_Prime()
 
-    def DeclVoid_Prime(self):  
+    def FunctionDeclVoid_Prime(self):
+        self.FunctionTypeVoid()
 
-        #tratar de avanzar en lista hasta encontrar putno y coma
-        if self.currentToken in (tokensAndCons.TKN_SEMICOLON):
-           self.VariableDeclVoid()
-        #tratar de avanzar en lista hasta encontrar un '('
-        elif self.currentToken in (tokensAndCons.TKN_PAREN_L):
-            self.FunctionDeclareVoid()
-        ## si ya no hay mas tokens muere
-        ## si no vuelve a DeclVoid
-        self.DeclVoid()
+    def FunctionTypeVoid(self):
+        token = self.currentToken
+        # se evalua que la función tenga un tipo
+        if token in (tokensAndCons.TKN_INT, tokensAndCons.TKN_DOUBLE, tokensAndCons.TKN_BOOLEAN, tokensAndCons.TKN_STRING, tokensAndCons.TKN_IDENTIFIER):
+            self.next()
+            self.TypeVoid()
+        # se evalua que venga un void
+        elif token in (tokensAndCons.TKN_VOID):
+            self.next()
+            token = self.currentToken
+            # se evalua que siga un identificador
+            if token in (tokensAndCons.TKN_IDENTIFIER):
+                self.next()
+                token = self.currentToken
+                # se evalua que siga un '('
+                if token in (tokensAndCons.TKN_PAREN_L):
+                    self.next()
+                    self.FormalsVoid()
+            #else error    
+    def FormalsVoid(self):
+        token = self.currentToken
+
+
 
     def VariableDeclVoid(self):
-        k = 0
-    def FunctionDeclareVoid(self):
-        k = 0
-    def ProgramVoid_Prime(self):
-        k = 0
-        #if tokens irse a programVoid
-        #si no se detecta epsilon
-        
+        self.VariableVoid()
+    
+    def VariableVoid(self):
+        self.TypeArrayVoid()
 
 
-    def TypeR (self):
+    def TypeArrayVoid(self):
+        self.TypeVoid()
+        #se evalua que despues de el tipo venga un identificador
+        token = self.currentToken
+        if token in (tokensAndCons.TKN_IDENTIFIER):
+            self.next()
+            token = self.currentToken
+        if token in (tokensAndCons.TKN_SEMICOLON):
+            self.next()
+
+    def TypeVoid(self):
         token = self.currentToken
         if token in (tokensAndCons.TKN_INT, tokensAndCons.TKN_DOUBLE, tokensAndCons.TKN_BOOLEAN, tokensAndCons.TKN_STRING, tokensAndCons.TKN_IDENTIFIER):
             self.next()
-            return TypeVariable(token)
-    
+            self.ArrayVoid()
+
+    def ArrayVoid(self):
+        token = self.currentToken
+        if token in (tokensAndCons.TKN_SQRBRKT):
+            self.next()
+        ## si no se detecta como epsilon y no se avanza 
+  
