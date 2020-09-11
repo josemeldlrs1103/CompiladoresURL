@@ -18,5 +18,8 @@ while True:
             print (Element)
         fileRW.write(Text, SymbolTab)
     ## esto de abajo es para probar el funcionamineto del paso de parametros, borrar luego
-    p1 = parserCls.ParserCls(SymbolTab)
-    p2 = p1.TypeR()
+    if (len(SymbolTab) > 0):
+        p1 = parserCls.ParserCls(SymbolTab)
+        p1.ProgramVoid()
+    else:
+        print ('El archivo analizado solamente tiene comentarios')
