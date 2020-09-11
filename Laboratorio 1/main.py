@@ -8,7 +8,7 @@ while True:
         print(error)
     else:
         Lines = lexer.Lexer(Result)
-        SymbolTab= Lines.EvaluateLines()
+        SymbolTab, TokensTab= Lines.EvaluateLines()
         ErrorQuantity = lexer.ErrorQuantity
         if(ErrorQuantity != 0):
             SymbolTab.append('El archivo cuenta con: ' + str(ErrorQuantity) + ' errores.')
