@@ -461,25 +461,10 @@ class Lexer:
                         StringAux = ''
                 elif (StringAux == '('):
                         if (re.search(tokensAndCons.ERParentesis, Element)):
-                            try:
-                                StringAux2 = StringAux + Element[PosE+1]
-                                if (StringAux2 == '()'):
-                                    PosS = PosE+1
-                                    PosE+=1
-                                    TokensFounded.append(self.fillAux(StringAux2,LineN,PosS+1,PosE+1,tokensAndCons.TKN_PAREN))
-                                    IdTokens.append(self.ParserList(tokensAndCons.TKN_PAREN))
-                                    StringAux2 = ''
-                                    StringAux = ''
-                                else:
-                                    PosS = PosE+1
-                                    TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_PAREN_L))
-                                    IdTokens.append(self.ParserList(tokensAndCons.TKN_PAREN_L))
-                                    StringAux = ''
-                            except:
-                                PosS = PosE+1
-                                TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_PAREN_L))
-                                IdTokens.append(self.ParserList(tokensAndCons.TKN_PAREN_L))
-                                StringAux = ''
+                            PosS = PosE+1
+                            TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_PAREN_L))
+                            IdTokens.append(self.ParserList(tokensAndCons.TKN_PAREN_L))
+                            StringAux = ''
                         else:
                             PosS = PosE+1
                             TokensFounded.append(errorManager.expected(LineN,PosS+1, '(', ')'))

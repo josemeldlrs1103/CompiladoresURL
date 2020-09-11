@@ -66,9 +66,22 @@ class ParserCls:
             if tempToken in (tokensAndCons.TKN_SEMICOLON):
                 self.VariableDeclVoid()
             elif tempToken in (tokensAndCons.TKN_PAREN_L):
-                self.FunctionDeclVoid()
+                self.FunctionDeclVoid()                
+            #else:
+               # tempToken = self.tokenList[self.index + 1]
+
     def FunctionDeclVoid(self):
         self.FunctionDeclVoid_Prime()
+        token = self.currentToken
+        if token in (tokensAndCons.TKN_IDENTIFIER):
+            self.next()
+            token = self.currentToken
+            if token in (tokensAndCons.TKN_PAREN_L):
+                self.next()
+                self.FormalsVoid()
+                if token in (tokensAndCons.TKN_PAREN_R):
+                    self.next()
+                    self.StmtVoid()
 
     def FunctionDeclVoid_Prime(self):
         self.FunctionTypeVoid()
@@ -90,10 +103,12 @@ class ParserCls:
                 # se evalua que siga un '('
                 if token in (tokensAndCons.TKN_PAREN_L):
                     self.next()
-                    self.FormalsVoid()
+                    token = self.currentToken
                     if token in (tokensAndCons.TKN_PAREN_R):
                         self.next()
                         self.StmtVoid()
+                    else :
+                        self.FormalsVoid()
             #else error  
     def StmtVoid(self):
         token = self.currentToken
@@ -284,6 +299,7 @@ class ParserCls:
     def FormalsVoid(self):
         self.VariableVoid()
         self.FormalsVoid_Prime()
+        
 
     def FormalsVoid_Prime(self):
         self.next()
@@ -307,8 +323,8 @@ class ParserCls:
         if token in (tokensAndCons.TKN_IDENTIFIER):
             self.next()
             token = self.currentToken
-        if token in (tokensAndCons.TKN_SEMICOLON):
-            self.next()
+            if token in (tokensAndCons.TKN_SEMICOLON):
+                self.next()
 
     def TypeVoid(self):
         token = self.currentToken
