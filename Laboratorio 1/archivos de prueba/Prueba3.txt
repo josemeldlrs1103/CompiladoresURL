@@ -1,0 +1,5 @@
+int b;
+   int a;
+   int d;
+   int INT; // reserved word and ID
+   bool TRUE;  // A bool

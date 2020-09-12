@@ -1,0 +1,37 @@
+Program				::= Decl Program'
+Program'			::= Program | ε
+Decl 	    		::= Decl' Decl
+Decl'		    	::= VariableDecl | FunctionDecl
+VariableDecl 		::= Variable ;
+Variable 	    	::= TypeA ident
+TypeA				::= Type Array
+Array				::= [] | ε 
+Type 	    		::= int | double | bool | string | ident 
+FunctionDecl 		::= FunctionDecl' ident (Formals) Stmt
+FunctionDecl'		::= Type | void
+Formals	        	::= Variable Formals' | ε 
+Formals'			::=	,Variable | ε
+Stmt 		    	::= IfStmt | WhileStmt | Expr ; | ε 
+IfStmt 	       		::= if (Expr) Stmt IfStmt'
+IfStmt'	       		::= else Stmt | ε
+WhileStmt   		::= while (Expr) Stmt
+Expr 	        	::= Constant | this | New(ident) | ExprOr | LValue
+ExprOr				::= ExprAnd ExprOr'
+EsprOr' 			::= || ExprAnd ExprOr' | ε
+ExprAnd				::= ExprEquals ExprAnd'
+EsprAnd' 			::= && ExprEquals ExprAnd' | ε
+ExprEquals			::= ExprComp ExprEquals'
+ExprEquals'			::= == ExprComp ExprEquals' | != ExprComp ExprEquals' | ε
+ExprComp			::= ExprAdd ExprComp'
+ExprComp'			::= < ExprAdd ExprComp' | > ExprAdd ExprComp' | <= ExprAdd ExprComp' | >= ExprAdd ExprComp' | ε
+ExprAdd				::= ExprMul ExprAdd'
+ExprAdd'			::= + ExprMul ExprAdd' | - ExprMul ExprAdd' | ε
+ExprMul				::= ExprPre ExprMul'
+ExprMul'	        ::= * ExprPre ExprMul' | / ExprMul ExprAdd' | % ExprMul ExprAdd' | ε 
+ExprPre				::= ExprParen ExprPre'
+ExprPre'			::= - ExprParen ExprPre' | ! ExprParen ExprPre' | ε
+ExprParen			::= (Expr) | ε
+LValue	    		::= LValue' LValueExpr
+LValue'             ::= ident | Expr.ident | Expr [Expr] | ε
+LValueExpr          ::= LValue = Expr | ε
+Constant	    	::= intConstant | doubleConstant | boolConstant | stringConstant | null

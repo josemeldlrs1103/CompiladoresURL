@@ -1,0 +1,8 @@
+bool gane;
+if(gane)
+estoy = "Estoy contento";
+else
+estoy = "estoy triste";
+
+while (gane)
+queHago = "celebrare"
