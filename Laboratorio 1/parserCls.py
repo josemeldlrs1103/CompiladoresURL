@@ -1,4 +1,5 @@
 import tokensAndCons
+import sys
 class TypeVariable:
     def __init__(self, token):
         self.token = token
@@ -26,6 +27,7 @@ class ParserCls:
         self.tokenList = tokenList
         self.index = -1
         self.next()
+        self.error = 0
     
     def next(self):
         self.index +=1
@@ -44,6 +46,10 @@ class ParserCls:
         if self.index < len(self.tokenList):        
             self.DeclVoid()
             self.ProgramVoid_Prime()
+        if (self.error == 0):
+            return 'El archivo no cuenta con errores'
+        else:
+            return 'El archivo cuenta con errores'
 
     def ProgramVoid_Prime(self):
         if self.index < len(self.tokenList):        
@@ -68,8 +74,9 @@ class ParserCls:
                 self.VariableDeclVoid()
             elif tempToken in (tokensAndCons.TKN_PAREN_L):
                 self.FunctionDeclVoid()                
-            #else:
-               # tempToken = self.tokenList[self.index + 1]
+            else:
+                self.error+=1
+                sys.exit()
 
 
     def FunctionDeclVoid(self):
@@ -98,6 +105,9 @@ class ParserCls:
         # se evalua que venga un void
         elif token in (tokensAndCons.TKN_VOID):
             self.next()
+        else:
+            self.error+=1
+            sys.exit()
  
     def StmtVoid(self):
         token = self.currentToken
@@ -112,6 +122,9 @@ class ParserCls:
         elif token in (tokensAndCons.TKN_INTCONST, tokensAndCons.TKN_DOUBCONST, tokensAndCons.TKN_BOOLCONST,tokensAndCons.TKN_STRCONST, tokensAndCons.TKN_NULL, tokensAndCons.TKN_OR, tokensAndCons.TKN_AND,tokensAndCons.TKN_DBLEQLS, tokensAndCons.TKN_DISTINCT, tokensAndCons.TKN_MINOR, tokensAndCons.TKN_MAJOR, tokensAndCons.TKN_MAJEQLS, tokensAndCons.TKN_MINEQLS, tokensAndCons.TKN_PLUS, tokensAndCons.TKN_MINUS, tokensAndCons.TKN_MULT, tokensAndCons.TKN_DIV, tokensAndCons.TKN_PRCTGE, tokensAndCons.TKN_EXCMARK, tokensAndCons.TKN_PAREN_L, tokensAndCons.TKN_IDENTIFIER, tokensAndCons.TKN_INT, tokensAndCons.TKN_DOUBLE, tokensAndCons.TKN_STRING, tokensAndCons.TKN_BOOLEAN):
             self.ExprVoid()
             ##agregar validación ;
+        else:
+            self.error+=1
+            sys.exit()
 
     def WhileStmtVoid(self):
         token = self.currentToken()
@@ -123,6 +136,9 @@ class ParserCls:
                 #se avanza y mueve a stmt
                 self.next()
                 self.StmtVoid()
+        else:
+            self.error+=1
+            sys.exit()
 
     def IfStmtVoid(self):
         token = self.currentToken
@@ -136,6 +152,9 @@ class ParserCls:
                 self.StmtVoid()
                 self.next()
                 self.IfStmtVoid_Prime()
+        else:
+            self.error+=1
+            sys.exit()
 
     def IfStmtVoid_Prime(self):
         token = self.currentToken()
@@ -171,6 +190,9 @@ class ParserCls:
         #Lvalue
         elif token in (tokensAndCons.TKN_IDENTIFIER):
             self.LValueVoid()
+        else:
+            self.error+=1
+            sys.exit()
 
     def LValueVoid(self):
         self.LValueVoid_Prime()
@@ -194,7 +216,8 @@ class ParserCls:
                 if token in (tokensAndCons.TKN_SQRBRKT_R):
                     self.next()
             else:
-                i = 0
+                self.error+=1
+                sys.exit()
     
     def LValueExprVoid(self):
         self.LValueVoid()
