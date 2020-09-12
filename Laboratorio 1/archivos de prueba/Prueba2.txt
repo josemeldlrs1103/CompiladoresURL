@@ -1,0 +1,4 @@
+int a;
+double b;
+string c;
+bool true;
