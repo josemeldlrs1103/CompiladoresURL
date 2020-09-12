@@ -1,6 +1,7 @@
 import fileRW 
 import lexer
 import parserCls
+import newSecuence
 while True:
     Text = input('Ingrese la ruta del archivo a analizar\r\n>')
     Result, error = fileRW.read(Text)

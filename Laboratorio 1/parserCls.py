@@ -58,6 +58,7 @@ class ParserCls:
         if self.index < len(self.tokenList):        
             self.DeclVoid_Prime()
             self.DeclVoid()
+
         
     def DeclVoid_Prime(self):
         if self.index < len(self.tokenList): 
@@ -69,6 +70,7 @@ class ParserCls:
                 self.FunctionDeclVoid()                
             #else:
                # tempToken = self.tokenList[self.index + 1]
+
 
     def FunctionDeclVoid(self):
         self.FunctionDeclVoid_Prime()
@@ -96,21 +98,7 @@ class ParserCls:
         # se evalua que venga un void
         elif token in (tokensAndCons.TKN_VOID):
             self.next()
-            token = self.currentToken
-            # se evalua que siga un identificador
-            #if token in (tokensAndCons.TKN_IDENTIFIER):
-                #self.next()
-                #token = self.currentToken
-                # se evalua que siga un '('
-                #if token in (tokensAndCons.TKN_PAREN_L):
-                #   self.next()
-                #    token = self.currentToken
-                #    if token in (tokensAndCons.TKN_PAREN_R):
-                #        self.next()
-                #        self.StmtVoid()
-                #    else :
-                #        self.FormalsVoid()
-            #else error  
+ 
     def StmtVoid(self):
         token = self.currentToken
         if token in (tokensAndCons.TKN_WHILE):
@@ -121,7 +109,7 @@ class ParserCls:
             self.IfStmtVoid()
         #este bloque define si el stmt es o no epsilon, ya que al no coincidir con ninguno de los simbolos terminales qen los que puede derivar
         #Expr se detecta que se tiene una cadena vacia 
-        elif token in (tokensAndCons.TKN_INTCONST, tokensAndCons.TKN_DOUBCONST, tokensAndCons.TKN_BOOLCONST,tokensAndCons.TKN_STRCONST, tokensAndCons.TKN_NULL, tokensAndCons.TKN_OR, tokensAndCons.TKN_AND,tokensAndCons.TKN_DBLEQLS, tokensAndCons.TKN_DISTINCT, tokensAndCons.TKN_MINOR, tokensAndCons.TKN_MAJOR, tokensAndCons.TKN_MAJEQLS, tokensAndCons.TKN_MINEQLS, tokensAndCons.TKN_PLUS, tokensAndCons.TKN_MINUS, tokensAndCons.TKN_MULT, tokensAndCons.TKN_DIV, tokensAndCons.TKN_PRCTGE, tokensAndCons.TKN_EXCMARK, tokensAndCons.TKN_PAREN_L, tokensAndCons.TKN_IDENTIFIER):
+        elif token in (tokensAndCons.TKN_INTCONST, tokensAndCons.TKN_DOUBCONST, tokensAndCons.TKN_BOOLCONST,tokensAndCons.TKN_STRCONST, tokensAndCons.TKN_NULL, tokensAndCons.TKN_OR, tokensAndCons.TKN_AND,tokensAndCons.TKN_DBLEQLS, tokensAndCons.TKN_DISTINCT, tokensAndCons.TKN_MINOR, tokensAndCons.TKN_MAJOR, tokensAndCons.TKN_MAJEQLS, tokensAndCons.TKN_MINEQLS, tokensAndCons.TKN_PLUS, tokensAndCons.TKN_MINUS, tokensAndCons.TKN_MULT, tokensAndCons.TKN_DIV, tokensAndCons.TKN_PRCTGE, tokensAndCons.TKN_EXCMARK, tokensAndCons.TKN_PAREN_L, tokensAndCons.TKN_IDENTIFIER, tokensAndCons.TKN_INT, tokensAndCons.TKN_DOUBLE, tokensAndCons.TKN_STRING, tokensAndCons.TKN_BOOLEAN):
             self.ExprVoid()
             ##agregar validación ;
 
@@ -137,7 +125,7 @@ class ParserCls:
                 self.StmtVoid()
 
     def IfStmtVoid(self):
-        token = self.currentToken()
+        token = self.currentToken
         if token in (tokensAndCons.TKN_PAREN_L):
             #se avanza y mueve a EXPR
             self.next()
@@ -158,9 +146,9 @@ class ParserCls:
 
         
     def ExprVoid(self):
-        token = self.currentToken()
+        token = self.currentToken
         #evaluar constantes:
-        if token in (tokensAndCons.TKN_INTCONST, tokensAndCons.TKN_DOUBCONST, tokensAndCons.TKN_BOOLCONST,tokensAndCons.TKN_STRCONST, tokensAndCons.TKN_NULL):
+        if token in (tokensAndCons.TKN_INTCONST, tokensAndCons.TKN_DOUBCONST, tokensAndCons.TKN_BOOLCONST,tokensAndCons.TKN_STRCONST, tokensAndCons.TKN_NULL, tokensAndCons.TKN_INT, tokensAndCons.TKN_DOUBLE, tokensAndCons.TKN_STRING, tokensAndCons.TKN_BOOLEAN):
             self.next()
         #evaluar this:
         elif token in (tokensAndCons.TKN_THIS):
@@ -178,10 +166,10 @@ class ParserCls:
                     if token in (tokensAndCons.TKN_PAREN_R):
                         self.next()
         #ExprOr
-        elif token in (tokensAndCons.TKN_OR, tokensAndCons.TKN_AND,tokensAndCons.TKN_DBLEQLS, tokensAndCons.TKN_DISTINCT, tokensAndCons.TKN_MINOR, tokensAndCons.TKN_MAJOR, tokensAndCons.TKN_MAJEQLS, tokensAndCons.TKN_MINEQLS, tokensAndCons.TKN_PLUS, tokensAndCons.TKN_MINUS, tokensAndCons.TKN_MULT, tokensAndCons.TKN_DIV, tokensAndCons.TKN_PRCTGE, tokensAndCons.TKN_EXCMARK, tokensAndCons.TKN_PAREN_L, tokensAndCons.TKN_IDENTIFIER):
+        elif token in (tokensAndCons.TKN_OR, tokensAndCons.TKN_AND,tokensAndCons.TKN_DBLEQLS, tokensAndCons.TKN_DISTINCT, tokensAndCons.TKN_MINOR, tokensAndCons.TKN_MAJOR, tokensAndCons.TKN_MAJEQLS, tokensAndCons.TKN_MINEQLS, tokensAndCons.TKN_PLUS, tokensAndCons.TKN_MINUS, tokensAndCons.TKN_MULT, tokensAndCons.TKN_DIV, tokensAndCons.TKN_PRCTGE, tokensAndCons.TKN_EXCMARK, tokensAndCons.TKN_PAREN_L):
             self.ExprOrVoid()
         #Lvalue
-        else:
+        elif token in (tokensAndCons.TKN_IDENTIFIER):
             self.LValueVoid()
 
     def LValueVoid(self):
@@ -205,6 +193,8 @@ class ParserCls:
                 token = self.currentToken
                 if token in (tokensAndCons.TKN_SQRBRKT_R):
                     self.next()
+            else:
+                i = 0
     
     def LValueExprVoid(self):
         self.LValueVoid()
@@ -309,14 +299,15 @@ class ParserCls:
         if token in (tokensAndCons.TKN_SEMICOLON):
             self.next()
             self.VariableVoid()
-            self.FormalsVoid_Prime()
 
     def VariableDeclVoid(self):
         self.VariableVoid()
     
     def VariableVoid(self):
         self.TypeArrayVoid()
-
+        token = self.currentToken
+        if token in (tokensAndCons.TKN_SEMICOLON):
+            self.next()
 
     def TypeArrayVoid(self):
         self.TypeVoid()
@@ -324,9 +315,7 @@ class ParserCls:
         token = self.currentToken
         if token in (tokensAndCons.TKN_IDENTIFIER):
             self.next()
-            token = self.currentToken
-            if token in (tokensAndCons.TKN_SEMICOLON):
-                self.next()
+            
 
     def TypeVoid(self):
         token = self.currentToken
