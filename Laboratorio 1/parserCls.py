@@ -79,6 +79,7 @@ class ParserCls:
             if token in (tokensAndCons.TKN_PAREN_L):
                 self.next()
                 self.FormalsVoid()
+                token = self.currentToken
                 if token in (tokensAndCons.TKN_PAREN_R):
                     self.next()
                     self.StmtVoid()
@@ -97,18 +98,18 @@ class ParserCls:
             self.next()
             token = self.currentToken
             # se evalua que siga un identificador
-            if token in (tokensAndCons.TKN_IDENTIFIER):
-                self.next()
-                token = self.currentToken
+            #if token in (tokensAndCons.TKN_IDENTIFIER):
+                #self.next()
+                #token = self.currentToken
                 # se evalua que siga un '('
-                if token in (tokensAndCons.TKN_PAREN_L):
-                    self.next()
-                    token = self.currentToken
-                    if token in (tokensAndCons.TKN_PAREN_R):
-                        self.next()
-                        self.StmtVoid()
-                    else :
-                        self.FormalsVoid()
+                #if token in (tokensAndCons.TKN_PAREN_L):
+                #   self.next()
+                #    token = self.currentToken
+                #    if token in (tokensAndCons.TKN_PAREN_R):
+                #        self.next()
+                #        self.StmtVoid()
+                #    else :
+                #        self.FormalsVoid()
             #else error  
     def StmtVoid(self):
         token = self.currentToken
@@ -122,6 +123,7 @@ class ParserCls:
         #Expr se detecta que se tiene una cadena vacia 
         elif token in (tokensAndCons.TKN_INTCONST, tokensAndCons.TKN_DOUBCONST, tokensAndCons.TKN_BOOLCONST,tokensAndCons.TKN_STRCONST, tokensAndCons.TKN_NULL, tokensAndCons.TKN_OR, tokensAndCons.TKN_AND,tokensAndCons.TKN_DBLEQLS, tokensAndCons.TKN_DISTINCT, tokensAndCons.TKN_MINOR, tokensAndCons.TKN_MAJOR, tokensAndCons.TKN_MAJEQLS, tokensAndCons.TKN_MINEQLS, tokensAndCons.TKN_PLUS, tokensAndCons.TKN_MINUS, tokensAndCons.TKN_MULT, tokensAndCons.TKN_DIV, tokensAndCons.TKN_PRCTGE, tokensAndCons.TKN_EXCMARK, tokensAndCons.TKN_PAREN_L, tokensAndCons.TKN_IDENTIFIER):
             self.ExprVoid()
+            ##agregar validación ;
 
     def WhileStmtVoid(self):
         token = self.currentToken()
@@ -302,7 +304,7 @@ class ParserCls:
         
 
     def FormalsVoid_Prime(self):
-        self.next()
+        #self.next()
         token = self.currentToken
         if token in (tokensAndCons.TKN_SEMICOLON):
             self.next()
