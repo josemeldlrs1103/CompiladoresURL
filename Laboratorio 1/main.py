@@ -1,26 +1,29 @@
 import fileRW 
 import lexer
 import parserCls
-import newSecuence
 while True:
     Text = input('Ingrese la ruta del archivo a analizar\r\n>')
     Result, error = fileRW.read(Text)
     if error: 
         print(error)
     else:
+        Element = ''
         Lines = lexer.Lexer(Result)
         SymbolTab, TokensTab = Lines.EvaluateLines()
         ErrorQuantity = lexer.ErrorQuantity
         if(ErrorQuantity != 0):
-            SymbolTab.append('El archivo cuenta con: ' + str(ErrorQuantity) + ' errores.')
+            Element ='El archivo cuenta con: ' + str(ErrorQuantity) + ' errores.'
         else:
-            SymbolTab.append('El archivo no cuenta con errores.')
-        for Element in SymbolTab:
+            Element = 'El archivo no cuenta con errores.'
+        #for Element in SymbolTab:
             print (Element)
-        fileRW.write(Text, SymbolTab)
-    ## esto de abajo es para probar el funcionamineto del paso de parametros, borrar luego
+        #fileRW.write(Text, SymbolTab)
     if (len(TokensTab) > 0):
-        p1 = parserCls.ParserCls(TokensTab)
-        p1.ProgramVoid()
+        try:
+            p1 = parserCls.ParserCls(TokensTab)
+            p2 = p1.ProgramVoid()
+            print(p2)
+        except:
+            print ('')
     else:
         print ('El archivo analizado solamente tiene comentarios')
