@@ -21,3 +21,18 @@ def write(Text, SymbolTab):
     for Element in SymbolTab:
         file.write(Element+"\n")
     file.close()
+
+def readLRTable():
+    Error = None
+    Table = None
+    Status = []
+    try:
+        File1 = open('LRTable.txt','r')
+        Table = File1.readlines()
+        if((len(Table))==0):
+            Error='El archivo con la tabla LR está vacío'
+        for Element in Table:
+            Status.append(Element[:-1])
+    except:
+        Error = 'El archivo con la tabla LR no existe'
+    return Status, Error
