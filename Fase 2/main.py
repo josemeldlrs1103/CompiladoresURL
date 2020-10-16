@@ -18,4 +18,4 @@ while True:
         else:
             print('El archivo no cuenta con errores.')
             
-        ascentParser.ascentParser()
+        ascentParser.ascentParser(TokensTab)

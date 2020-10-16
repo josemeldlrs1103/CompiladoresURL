@@ -2,7 +2,7 @@ import fileRW
 import stateNode
 
 class ascentParser:
-    def __init__(self):
+    def __init__(self,tokens):
         Result, error = fileRW.readLRTable()
         Table = []
         if error: 
@@ -59,7 +59,7 @@ class ascentParser:
                 i+=1  
         #se obtienen las reglas de produccion de la gramática    
         Rules = self.getProductionRules()
-
+        debug = 'this is a debug var'
 
     def getProductionRules(self):
         Result, error = fileRW.readProductionRules()

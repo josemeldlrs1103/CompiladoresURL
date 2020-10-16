@@ -74,9 +74,9 @@ class Lexer:
                                 Prior = True
                     else:
                         Prior = True
-                elif(re.search(tokensAndCons.Identificadores,StringAnalizer)):
+                elif(re.search(tokensAndCons.Identifiers,StringAnalizer)):
                         AnalizedChar =True
-                        LastRecognition = 'Identificador'
+                        LastRecognition = 'identifier'
                         if(StringAnalizer == 'true' or StringAnalizer== 'false'):
                             LastRecognition = 'Booleano'
                 elif(re.search(tokensAndCons.Enteros, StringAnalizer)):
@@ -150,7 +150,7 @@ class Lexer:
                                 Prior=False
                                 if(StringAnalizer!='' and StringAnalizer!=' ' and StringAnalizer!='\t' and StringAnalizer!='\n' and StringAnalizer!='+' and StringAnalizer!='-' and StringAnalizer!='*' and StringAnalizer!='/' and StringAnalizer!='%' and StringAnalizer!='<' and StringAnalizer!='>' and StringAnalizer!='=' and StringAnalizer!='!' and StringAnalizer!='&' and StringAnalizer!='|' and StringAnalizer!=';' and StringAnalizer!=',' and StringAnalizer!='.' and StringAnalizer!='(' and StringAnalizer!=')' and StringAnalizer!='[' and StringAnalizer!=']' and StringAnalizer!='{' and StringAnalizer!='}'):
                                     AnalizedChar = False
-                        elif(LastRecognition == 'Identificador'):
+                        elif(LastRecognition == 'identifier'):
                             if(DiscardChars==False):
                                 TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_'+LastRecognition))
                                 IdTokens.append(self.ParserList('T_'+LastRecognition))
@@ -208,7 +208,7 @@ class Lexer:
                                 TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_'+StringAnalizer))
                                 IdTokens.append(self.ParserList('T_'+StringAnalizer))
                                 AnalizedChar = False
-                    elif(LastRecognition == 'Identificador'):
+                    elif(LastRecognition == 'identifier'):
                         if(DiscardChars==False):
                             TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_'+LastRecognition))
                             IdTokens.append(self.ParserList('T_'+LastRecognition))

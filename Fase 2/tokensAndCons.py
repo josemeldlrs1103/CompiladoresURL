@@ -27,7 +27,7 @@ TKN_NEW       = 'T_New'
 TKN_NEWARRAY  = 'T_NewArray'
 TKN_CONSOLE   = 'T_Console'
 TKN_WRITELINE = 'T_WriteLine'
-TKN_IDENTIFIER= 'T_Identificador'
+TKN_IDENTIFIER= 'T_identifier'
 TKN_PRINT     = 'T_Print'
 #Comentarios
 TKN_CMT_LINE  = 'T_COMMENT_LINE'
@@ -65,7 +65,7 @@ TKN_BRKT_R    = 'T_RIGHT_BRACKETS'
 
 #ExpresionesRegulares
 Reservadas1 = r'^(void|int|double|bool|string|null|this|while|if|else|New|class)$'
-Identificadores = r'^([a-z]|[A-Z])(([a-z]|[A-Z])|[0-9]|_){0,30}$'
+Identifiers = r'^([a-z]|[A-Z])(([a-z]|[A-Z])|[0-9]|_){0,30}$'
 Enteros = r'^((0(x|X)([0-9]|[a-f]|[A-F])+)|([0-9]+))$'
 TempHex = r'^0(x|X)$'
 Double = r'^(([0-9]+\.[0-9]*(e|E)(\+|-)?[0-9]+)|([0-9]+\.[0-9]*))$'
