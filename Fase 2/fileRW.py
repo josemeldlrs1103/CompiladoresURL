@@ -36,3 +36,18 @@ def readLRTable():
     except:
         Error = 'El archivo con la tabla LR no existe'
     return Status, Error
+
+def readProductionRules():
+    Error = None
+    Table = None
+    Status = []
+    try:
+        File1 = open('ProductionRules.txt','r')
+        Table = File1.readlines()
+        if((len(Table))==0):
+            Error='El archivo con las reglas de la gramática está vacío'
+        for Element in Table:
+            Status.append(Element[:-1])
+    except:
+        Error = 'El archivo con las reglas de la gramática no existe'
+    return Status, Error

@@ -64,7 +64,7 @@ TKN_BRKT_L    = 'T_LEFT_BRACKETS'
 TKN_BRKT_R    = 'T_RIGHT_BRACKETS'
 
 #ExpresionesRegulares
-Reservadas1 = r'^(void|int|double|bool|string|null|this|while|if|else|New)$'
+Reservadas1 = r'^(void|int|double|bool|string|null|this|while|if|else|New|class)$'
 Identificadores = r'^([a-z]|[A-Z])(([a-z]|[A-Z])|[0-9]|_){0,30}$'
 Enteros = r'^((0(x|X)([0-9]|[a-f]|[A-F])+)|([0-9]+))$'
 TempHex = r'^0(x|X)$'

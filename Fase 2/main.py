@@ -10,7 +10,7 @@ while True:
         Lines = lexer.Lexer(Result)
         SymbolTab, TokensTab = Lines.EvaluateLines()
         ErrorQuantity = lexer.ErrorQuantity
-        for Element in SymbolTab:
+        for Element in TokensTab:
             print (Element)
         #fileRW.write(Text, SymbolTab)
         if(ErrorQuantity != 0):
