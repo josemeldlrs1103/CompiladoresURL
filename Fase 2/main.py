@@ -19,3 +19,4 @@ while True:
             print('El archivo no cuenta con errores.')
             
         ascentParser.ascentParser(TokensTab)
+        debug = "Cadena utilizada para debuggear"

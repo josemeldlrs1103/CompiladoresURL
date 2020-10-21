@@ -260,6 +260,7 @@ class Lexer:
                         self.countError()
                     StringAnalizer = ''
                     OpenString = None
+                    LastRecognition = ''
                 if(LastRecognition == 'String' or LastRecognition == 'Comment Line' or LastRecognition == 'Multi-Line Comment' or LastRecognition == 'SCMulti-Line Comment'):
                     StringAux =''
                 if (StringAux == '+'):
