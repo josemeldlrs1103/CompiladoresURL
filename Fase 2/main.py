@@ -11,12 +11,10 @@ while True:
         SymbolTab, TokensTab = Lines.EvaluateLines()
         ErrorQuantity = lexer.ErrorQuantity
         for Element in TokensTab:
-            print (Element)
+            print (Element.Token)
         #fileRW.write(Text, SymbolTab)
         if(ErrorQuantity != 0):
             print('El archivo cuenta con: ' + str(ErrorQuantity) + ' errores.')
         else:
             print('El archivo no cuenta con errores.')
-            
-        ascentParser.ascentParser(TokensTab)
-        debug = "Cadena utilizada para debuggear"
+            ascentParser.ascentParser(TokensTab)

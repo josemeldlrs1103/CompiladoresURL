@@ -15,3 +15,8 @@ class production:
     def __init__(self,left,right):
         self.left = left
         self.right = right
+#Clase para almacenar los tokens y la lína a la que corresponden
+class LToken:
+    def __init__(self,Token,Line):
+        self.Token = Token
+        self.Line = Line

@@ -58,13 +58,16 @@ class ascentParser:
                 Table.append(nuevo)
                 i+=1  
         #se obtienen las reglas de produccion de la gramática    
-        productionRules = self.getProductionRules()
+            productionRules = self.getProductionRules()
         
-        self.evaluate(tokensList, productionRules,Table)
+            self.evaluate(tokensList, productionRules,Table)
 
     def evaluate(self,tokensList,productionRules,SLRTable):
+        toknstack =[]
+        for Item in tokensList:
+            toknstack.append(Item.Token)
         # pila de tokens invirtiendo la tokenList para evaluar la entrada en la tabla de parseo
-        tokensStack = tokensList[::-1]
+        tokensStack = toknstack[::-1]
         #se añade $ a la pila de tokens
         tokensStack.insert(0,'$')
         #tokensStack.reverse()

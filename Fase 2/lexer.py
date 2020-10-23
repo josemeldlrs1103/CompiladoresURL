@@ -1,6 +1,7 @@
 import tokensAndCons
 import re
 import errorManager
+import stateNode
 ErrorQuantity = 0
 class Lexer:
 
@@ -146,14 +147,14 @@ class Lexer:
                                 if(StringAux in ' \n\t'):
                                     StringAnalizer += Element[PosE]
                                 TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_'+StringAnalizer))
-                                IdTokens.append(self.ParserList('T_'+StringAnalizer))
+                                IdTokens.append(stateNode.LToken('T_'+StringAnalizer,LineN))
                                 Prior=False
                                 if(StringAnalizer!='' and StringAnalizer!=' ' and StringAnalizer!='\t' and StringAnalizer!='\n' and StringAnalizer!='+' and StringAnalizer!='-' and StringAnalizer!='*' and StringAnalizer!='/' and StringAnalizer!='%' and StringAnalizer!='<' and StringAnalizer!='>' and StringAnalizer!='=' and StringAnalizer!='!' and StringAnalizer!='&' and StringAnalizer!='|' and StringAnalizer!=';' and StringAnalizer!=',' and StringAnalizer!='.' and StringAnalizer!='(' and StringAnalizer!=')' and StringAnalizer!='[' and StringAnalizer!=']' and StringAnalizer!='{' and StringAnalizer!='}'):
                                     AnalizedChar = False
                         elif(LastRecognition == 'identifier'):
                             if(DiscardChars==False):
                                 TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_'+LastRecognition))
-                                IdTokens.append(self.ParserList('T_'+LastRecognition))
+                                IdTokens.append(stateNode.LToken('T_'+LastRecognition,LineN))
                             if(StringAux!='' and StringAux!=' ' and StringAux!='\t' and StringAux!='\n' and StringAux!='+' and StringAux!='-' and StringAux!='*' and StringAux!='/' and StringAux!='%' and StringAux!='<' and StringAux!='>' and StringAux!='=' and StringAux!='!' and StringAux!='&' and StringAux!='|' and StringAux!=';' and StringAux!=',' and StringAux!='.' and StringAux!='(' and StringAux!=')' and StringAux!='[' and StringAux!=']' and StringAux!='{' and StringAux!='}'):
                                 DiscardChars = True
                             else:
@@ -161,17 +162,17 @@ class Lexer:
                                 LastRecognition = ''
                         elif(LastRecognition == 'Booleano'):
                             TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,tokensAndCons.TKN_BOOLCONST))
-                            IdTokens.append(self.ParserList(tokensAndCons.TKN_BOOLCONST))
+                            IdTokens.append(stateNode.LToken(tokensAndCons.TKN_BOOLCONST,LineN))
                             if(StringAnalizer!='' and StringAnalizer!=' ' and StringAnalizer!='\t' and StringAnalizer!='\n' and StringAnalizer!='+' and StringAnalizer!='-' and StringAnalizer!='*' and StringAnalizer!='/' and StringAnalizer!='%' and StringAnalizer!='<' and StringAnalizer!='>' and StringAnalizer!='=' and StringAnalizer!='!' and StringAnalizer!='&' and StringAnalizer!='|' and StringAnalizer!=';' and StringAnalizer!=',' and StringAnalizer!='.' and StringAnalizer!='(' and StringAnalizer!=')' and StringAnalizer!='[' and StringAnalizer!=']' and StringAnalizer!='{' and StringAnalizer!='}'):
                                  AnalizedChar = False
                         elif(LastRecognition == 'Integer'):
                             TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,tokensAndCons.TKN_INTCONST))
-                            IdTokens.append(self.ParserList(tokensAndCons.TKN_INTCONST))
+                            IdTokens.append(stateNode.LToken(tokensAndCons.TKN_INTCONST,LineN))
                             if(StringAnalizer!='' and StringAnalizer!=' ' and StringAnalizer!='\t' and StringAnalizer!='\n' and StringAnalizer!='+' and StringAnalizer!='-' and StringAnalizer!='*' and StringAnalizer!='/' and StringAnalizer!='%' and StringAnalizer!='<' and StringAnalizer!='>' and StringAnalizer!='=' and StringAnalizer!='!' and StringAnalizer!='&' and StringAnalizer!='|' and StringAnalizer!=';' and StringAnalizer!=',' and StringAnalizer!='.' and StringAnalizer!='(' and StringAnalizer!=')' and StringAnalizer!='[' and StringAnalizer!=']' and StringAnalizer!='{' and StringAnalizer!='}'):
                                 AnalizedChar = False
                         elif(LastRecognition == 'Double'):
                             TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,tokensAndCons.TKN_DOUBCONST))
-                            IdTokens.append(self.ParserList(tokensAndCons.TKN_DOUBCONST))
+                            IdTokens.append(stateNode.LToken(tokensAndCons.TKN_DOUBCONST,LineN))
                             if(StringAnalizer!='' and StringAnalizer!=' ' and StringAnalizer!='\t' and StringAnalizer!='\n' and StringAnalizer!='+' and StringAnalizer!='-' and StringAnalizer!='*' and StringAnalizer!='/' and StringAnalizer!='%' and StringAnalizer!='<' and StringAnalizer!='>' and StringAnalizer!='=' and StringAnalizer!='!' and StringAnalizer!='&' and StringAnalizer!='|' and StringAnalizer!=';' and StringAnalizer!=',' and StringAnalizer!='.' and StringAnalizer!='(' and StringAnalizer!=')' and StringAnalizer!='[' and StringAnalizer!=']' and StringAnalizer!='{' and StringAnalizer!='}'):
                                 AnalizedChar = False
                         elif(LastRecognition == 'Inicio Hex' or LastRecognition == 'Inicio dob'):
@@ -193,11 +194,11 @@ class Lexer:
                 if(Prior==True):
                     if(LastRecognition == 'Reservada'):
                         TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_'+StringAnalizer))
-                        IdTokens.append(self.ParserList('T_'+StringAnalizer))
+                        IdTokens.append(stateNode.LToken('T_'+StringAnalizer,LineN))
                     elif(LastRecognition == 'Inicio dob'):
                         StringAnalizer = StringAnalizer[:-1]
                         TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_Double'))
-                        IdTokens.append(self.ParserList('T_Double'))
+                        IdTokens.append(stateNode.LToken('T_Double',LineN))
                     Prior=False
                     StringAnalizer=''
                 if (StringAux == '\n'):
@@ -206,12 +207,12 @@ class Lexer:
                     if( LastRecognition == 'Reservada'):
                             if(StringAnalizer!='' and StringAnalizer!=' ' and StringAnalizer!='\t' and StringAnalizer!='\n' and StringAnalizer!='+' and StringAnalizer!='-' and StringAnalizer!='*' and StringAnalizer!='/' and StringAnalizer!='%' and StringAnalizer!='<' and StringAnalizer!='>' and StringAnalizer!='=' and StringAnalizer!='!' and StringAnalizer!='&' and StringAnalizer!='|' and StringAnalizer!=';' and StringAnalizer!=',' and StringAnalizer!='.' and StringAnalizer!='(' and StringAnalizer!=')' and StringAnalizer!='[' and StringAnalizer!=']' and StringAnalizer!='{' and StringAnalizer!='}'):
                                 TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_'+StringAnalizer))
-                                IdTokens.append(self.ParserList('T_'+StringAnalizer))
+                                IdTokens.append(stateNode.LToken('T_'+StringAnalizer,LineN))
                                 AnalizedChar = False
                     elif(LastRecognition == 'identifier'):
                         if(DiscardChars==False):
                             TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_'+LastRecognition))
-                            IdTokens.append(self.ParserList('T_'+LastRecognition))
+                            IdTokens.append(stateNode.LToken('T_'+LastRecognition,LineN))
                             if(StringAux!='' and StringAux!=' ' and StringAux!='\t' and StringAux!='\n' and StringAux!='+' and StringAux!='-' and StringAux!='*' and StringAux!='/' and StringAux!='%' and StringAux!='<' and StringAux!='>' and StringAux!='=' and StringAux!='!' and StringAux!='&' and StringAux!='|' and StringAux!=';' and StringAux!=',' and StringAux!='.' and StringAux!='(' and StringAux!=')' and StringAux!='[' and StringAux!=']' and StringAux!='{' and StringAux!='}'):
                                 DiscardChars = True
                             else:
@@ -220,17 +221,17 @@ class Lexer:
                     elif(LastRecognition == 'Booleano'):
                         if(StringAnalizer!='' and StringAnalizer!=' ' and StringAnalizer!='\t' and StringAnalizer!='\n' and StringAnalizer!='+' and StringAnalizer!='-' and StringAnalizer!='*' and StringAnalizer!='/' and StringAnalizer!='%' and StringAnalizer!='<' and StringAnalizer!='>' and StringAnalizer!='=' and StringAnalizer!='!' and StringAnalizer!='&' and StringAnalizer!='|' and StringAnalizer!=';' and StringAnalizer!=',' and StringAnalizer!='.' and StringAnalizer!='(' and StringAnalizer!=')' and StringAnalizer!='[' and StringAnalizer!=']' and StringAnalizer!='{' and StringAnalizer!='}'):
                             TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,tokensAndCons.TKN_BOOLCONST))
-                            IdTokens.append(self.ParserList(tokensAndCons.TKN_BOOLCONST))
+                            IdTokens.append(stateNode.LToken(tokensAndCons.TKN_BOOLCONST,LineN))
                             AnalizedChar = False
                     elif(LastRecognition == 'Integer'):
                         if(StringAnalizer!='' and StringAnalizer!=' ' and StringAnalizer!='\t' and StringAnalizer!='\n' and StringAnalizer!='+' and StringAnalizer!='-' and StringAnalizer!='*' and StringAnalizer!='/' and StringAnalizer!='%' and StringAnalizer!='<' and StringAnalizer!='>' and StringAnalizer!='=' and StringAnalizer!='!' and StringAnalizer!='&' and StringAnalizer!='|' and StringAnalizer!=';' and StringAnalizer!=',' and StringAnalizer!='.' and StringAnalizer!='(' and StringAnalizer!=')' and StringAnalizer!='[' and StringAnalizer!=']' and StringAnalizer!='{' and StringAnalizer!='}'):
                             TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,tokensAndCons.TKN_INTCONST))
-                            IdTokens.append(self.ParserList(tokensAndCons.TKN_INTCONST))
+                            IdTokens.append(stateNode.LToken(tokensAndCons.TKN_INTCONST,LineN))
                             AnalizedChar = False
                     elif(LastRecognition == 'Double'):
                         if(StringAnalizer!='' and StringAnalizer!=' ' and StringAnalizer!='\t' and StringAnalizer!='\n' and StringAnalizer!='+' and StringAnalizer!='-' and StringAnalizer!='*' and StringAnalizer!='/' and StringAnalizer!='%' and StringAnalizer!='<' and StringAnalizer!='>' and StringAnalizer!='=' and StringAnalizer!='!' and StringAnalizer!='&' and StringAnalizer!='|' and StringAnalizer!=';' and StringAnalizer!=',' and StringAnalizer!='.' and StringAnalizer!='(' and StringAnalizer!=')' and StringAnalizer!='[' and StringAnalizer!=']' and StringAnalizer!='{' and StringAnalizer!='}'):
                             TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,tokensAndCons.TKN_DOUBCONST))
-                            IdTokens.append(self.ParserList(tokensAndCons.TKN_DOUBCONST))
+                            IdTokens.append(stateNode.LToken(tokensAndCons.TKN_DOUBCONST,LineN))
                             AnalizedChar = False
                     elif(LastRecognition == 'Inicio Hex' or LastRecognition == 'Inicio dob'):
                         TokensFounded.append(errorManager.incomplete(LineN,StringAnalizer))
@@ -254,7 +255,7 @@ class Lexer:
                     Temp = StringAnalizer[1:-1]
                     if('\"' not in Temp and chr(0) not in Temp):
                         TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_String'+StringAnalizer))
-                        IdTokens.append(self.ParserList(tokensAndCons.TKN_STRCONST))
+                        IdTokens.append(stateNode.LToken(tokensAndCons.TKN_STRCONST,LineN))
                     else:
                         TokensFounded.append('Error encontrado en línea ' + LineN + ', la cadena presente en la línea contiene un caracter no válido')
                         self.countError()
@@ -266,12 +267,12 @@ class Lexer:
                 if (StringAux == '+'):
                         PosS = PosE+1
                         TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_PLUS))
-                        IdTokens.append(self.ParserList(tokensAndCons.TKN_PLUS))
+                        IdTokens.append(stateNode.LToken(tokensAndCons.TKN_PLUS,LineN))
                         StringAux = ''
                 elif (StringAux == '-'):
                         PosS = PosE+1
                         TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_MINUS))
-                        IdTokens.append(self.ParserList(tokensAndCons.TKN_MINUS))
+                        IdTokens.append(stateNode.LToken(tokensAndCons.TKN_MINUS,LineN))
                         StringAux = ''
                 elif (StringAux == '*'):
                         try:
@@ -284,12 +285,12 @@ class Lexer:
                             else:
                                 PosS = PosE+1
                                 TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_MULT))
-                                IdTokens.append(self.ParserList(tokensAndCons.TKN_MULT))
+                                IdTokens.append(stateNode.LToken(tokensAndCons.TKN_MULT,LineN))
                                 StringAux = ''
                         except:
                             PosS = PosE+1
                             TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_MULT))
-                            IdTokens.append(self.ParserList(tokensAndCons.TKN_MULT))
+                            IdTokens.append(stateNode.LToken(tokensAndCons.TKN_MULT,LineN))
                             StringAux = ''
                 elif (StringAux == '/'):
                         try:
@@ -307,17 +308,17 @@ class Lexer:
                             else:
                                 PosS = PosE+1
                                 TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_DIV))
-                                IdTokens.append(self.ParserList(tokensAndCons.TKN_DIV))
+                                IdTokens.append(stateNode.LToken(tokensAndCons.TKN_DIV,LineN))
                                 StringAux = ''
                         except:
                             PosS = PosE+1
                             TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_DIV))
-                            IdTokens.append(self.ParserList(tokensAndCons.TKN_DIV))
+                            IdTokens.append(stateNode.LToken(tokensAndCons.TKN_DIV,LineN))
                             StringAux = ''
                 elif (StringAux == '%'):
                         PosS = PosE+1
                         TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_PRCTGE))
-                        IdTokens.append(self.ParserList(tokensAndCons.TKN_PRCTGE))
+                        IdTokens.append(stateNode.LToken(tokensAndCons.TKN_PRCTGE,LineN))
                         StringAux = ''
                 elif (StringAux == '<'):
                         try:
@@ -326,18 +327,18 @@ class Lexer:
                                 PosS = PosE+1
                                 PosE+=1
                                 TokensFounded.append(self.fillAux(StringAux2,LineN,PosS+1,PosE+1,tokensAndCons.TKN_MINEQLS))
-                                IdTokens.append(self.ParserList(tokensAndCons.TKN_MINEQLS))
+                                IdTokens.append(stateNode.LToken(tokensAndCons.TKN_MINEQLS,LineN))
                                 StringAux2 = ''
                                 StringAux = ''
                             else:
                                 PosS = PosE+1
                                 TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_MINOR))
-                                IdTokens.append(self.ParserList(tokensAndCons.TKN_MINOR))
+                                IdTokens.append(stateNode.LToken(tokensAndCons.TKN_MINOR,LineN))
                                 StringAux = ''
                         except:
                             PosS = PosE+1
                             TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_MINOR))
-                            IdTokens.append(self.ParserList(tokensAndCons.TKN_MINOR))
+                            IdTokens.append(stateNode.LToken(tokensAndCons.TKN_MINOR,LineN))
                             StringAux = ''
                 elif (StringAux == '>'):
                         try:
@@ -346,18 +347,18 @@ class Lexer:
                                 PosS = PosE+1
                                 PosE+=1
                                 TokensFounded.append(self.fillAux(StringAux2,LineN,PosS+1,PosE+1,tokensAndCons.TKN_MAJEQLS))
-                                IdTokens.append(self.ParserList(tokensAndCons.TKN_MAJEQLS))
+                                IdTokens.append(stateNode.LToken(tokensAndCons.TKN_MAJEQLS,LineN))
                                 StringAux2 = ''
                                 StringAux = ''
                             else:
                                 PosS = PosE+1
                                 TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_MAJOR))
-                                IdTokens.append(self.ParserList(tokensAndCons.TKN_MAJOR))
+                                IdTokens.append(stateNode.LToken(tokensAndCons.TKN_MAJOR,LineN))
                                 StringAux = ''
                         except:
                             PosS = PosE+1
                             TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_MAJOR))
-                            IdTokens.append(self.ParserList(tokensAndCons.TKN_MAJOR))
+                            IdTokens.append(stateNode.LToken(tokensAndCons.TKN_MAJOR,LineN))
                             StringAux = ''
                 elif (StringAux == '='):
                         try:
@@ -366,18 +367,18 @@ class Lexer:
                                 PosS = PosE+1
                                 PosE+=1
                                 TokensFounded.append(self.fillAux(StringAux2,LineN,PosS+1,PosE+1,tokensAndCons.TKN_DBLEQLS))
-                                IdTokens.append(self.ParserList(tokensAndCons.TKN_DBLEQLS))
+                                IdTokens.append(stateNode.LToken(tokensAndCons.TKN_DBLEQLS,LineN))
                                 StringAux2 = ''
                                 StringAux = ''
                             else:
                                 PosS = PosE+1
                                 TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_EQUALS))
-                                IdTokens.append(self.ParserList(tokensAndCons.TKN_EQUALS))
+                                IdTokens.append(stateNode.LToken(tokensAndCons.TKN_EQUALS,LineN))
                                 StringAux = ''
                         except:
                             PosS = PosE+1
                             TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_EQUALS))
-                            IdTokens.append(self.ParserList(tokensAndCons.TKN_EQUALS))
+                            IdTokens.append(stateNode.LToken(tokensAndCons.TKN_EQUALS,LineN))
                             StringAux = ''
                 elif (StringAux == '!'):
                         try:
@@ -386,18 +387,18 @@ class Lexer:
                                 PosS = PosE+1
                                 PosE+=1
                                 TokensFounded.append(self.fillAux(StringAux2,LineN,PosS+1,PosE+1,tokensAndCons.TKN_DISTINCT))
-                                IdTokens.append(self.ParserList(tokensAndCons.TKN_DISTINCT))
+                                IdTokens.append(stateNode.LToken(tokensAndCons.TKN_DISTINCT,LineN))
                                 StringAux2 = ''
                                 StringAux = ''
                             else:
                                 PosS = PosE+1
                                 TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_EXCMARK))
-                                IdTokens.append(self.ParserList(tokensAndCons.TKN_EXCMARK))
+                                IdTokens.append(stateNode.LToken(tokensAndCons.TKN_EXCMARK,LineN))
                                 StringAux = ''
                         except:
                             PosS = PosE+1
                             TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_EXCMARK))
-                            IdTokens.append(self.ParserList(tokensAndCons.TKN_EXCMARK))
+                            IdTokens.append(stateNode.LToken(tokensAndCons.TKN_EXCMARK,LineN))
                             StringAux = ''
                 elif (StringAux == '&'):
                         try:
@@ -406,7 +407,7 @@ class Lexer:
                                 PosS = PosE+1
                                 PosE+=1
                                 TokensFounded.append(self.fillAux(StringAux2,LineN,PosS+1,PosE+1,tokensAndCons.TKN_AND))
-                                IdTokens.append(self.ParserList(tokensAndCons.TKN_AND))
+                                IdTokens.append(stateNode.LToken(tokensAndCons.TKN_AND,LineN))
                                 StringAux2 = ''
                                 StringAux = ''
                             else:
@@ -426,7 +427,7 @@ class Lexer:
                                 PosS = PosE+1
                                 PosE+=1
                                 TokensFounded.append(self.fillAux(StringAux2,LineN,PosS+1,PosE+1,tokensAndCons.TKN_AND))
-                                IdTokens.append(self.ParserList(tokensAndCons.TKN_AND))
+                                IdTokens.append(stateNode.LToken(tokensAndCons.TKN_AND,LineN))
                                 StringAux2 = ''
                                 StringAux = ''
                             else:
@@ -442,29 +443,29 @@ class Lexer:
                 elif (StringAux == ':'):
                     PosS = PosE+1
                     TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_COLON))
-                    IdTokens.append(self.ParserList(tokensAndCons.TKN_COLON))
+                    IdTokens.append(stateNode.LToken(tokensAndCons.TKN_COLON,LineN))
                     StringAux = ''
                 elif (StringAux == ';'):
                         PosS = PosE+1
                         TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_SEMICOLON))
-                        IdTokens.append(self.ParserList(tokensAndCons.TKN_SEMICOLON))
+                        IdTokens.append(stateNode.LToken(tokensAndCons.TKN_SEMICOLON,LineN))
                         StringAux = ''
                 elif (StringAux == ','):
                         PosS = PosE+1
                         TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_COMMA))
-                        IdTokens.append(self.ParserList(tokensAndCons.TKN_COMMA))
+                        IdTokens.append(stateNode.LToken(tokensAndCons.TKN_COMMA,LineN))
                         StringAux = ''
                 elif (StringAux == '.'):
                     if(DecimalExist== False):
                         PosS = PosE+1
                         TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_DOT))
-                        IdTokens.append(self.ParserList(tokensAndCons.TKN_DOT))
+                        IdTokens.append(stateNode.LToken(tokensAndCons.TKN_DOT,LineN))
                         StringAux = ''
                 elif (StringAux == '('):
                         if (re.search(tokensAndCons.ERParentesis, Element)):
                             PosS = PosE+1
                             TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_PAREN_L))
-                            IdTokens.append(self.ParserList(tokensAndCons.TKN_PAREN_L))
+                            IdTokens.append(stateNode.LToken(tokensAndCons.TKN_PAREN_L,LineN))
                             StringAux = ''
                         else:
                             PosS = PosE+1
@@ -474,7 +475,7 @@ class Lexer:
                 elif (StringAux == ')'):
                         PosS = PosE+1
                         TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_PAREN_R))
-                        IdTokens.append(self.ParserList(tokensAndCons.TKN_PAREN_R))
+                        IdTokens.append(stateNode.LToken(tokensAndCons.TKN_PAREN_R,LineN))
                         StringAux = ''
                 elif (StringAux == '['):
                         if (re.search(tokensAndCons.ERCorchetes, Element)):
@@ -484,18 +485,18 @@ class Lexer:
                                     PosS = PosE+1
                                     PosE+=1
                                     TokensFounded.append(self.fillAux(StringAux2,LineN,PosS+1,PosE+1,tokensAndCons.TKN_SQRBRKT))
-                                    IdTokens.append(self.ParserList(tokensAndCons.TKN_SQRBRKT))
+                                    IdTokens.append(stateNode.LToken(tokensAndCons.TKN_SQRBRKT,LineN))
                                     StringAux2 = ''
                                     StringAux = ''
                                 else:
                                     PosS = PosE+1
                                     TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_SQRBRKT_L))
-                                    IdTokens.append(self.ParserList(tokensAndCons.TKN_SQRBRKT_L))
+                                    IdTokens.append(stateNode.LToken(tokensAndCons.TKN_SQRBRKT_L,LineN))
                                     StringAux = ''
                             except:
                                 PosS = PosE+1
                                 TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_SQRBRKT_L))
-                                IdTokens.append(self.ParserList(tokensAndCons.TKN_SQRBRKT_L))
+                                IdTokens.append(stateNode.LToken(tokensAndCons.TKN_SQRBRKT_L,LineN))
                                 StringAux = ''
                         else:
                             PosS = PosE+1
@@ -505,7 +506,7 @@ class Lexer:
                 elif (StringAux == ']'):
                         PosS = PosE+1
                         TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_SQRBRKT_R))
-                        IdTokens.append(self.ParserList(tokensAndCons.TKN_SQRBRKT_R))
+                        IdTokens.append(stateNode.LToken(tokensAndCons.TKN_SQRBRKT_R,LineN))
                         StringAux = ''
                 elif (StringAux == '{'):
                         try:
@@ -514,23 +515,23 @@ class Lexer:
                                 PosS = PosE+1
                                 PosE+=1
                                 TokensFounded.append(self.fillAux(StringAux2,LineN,PosS+1,PosE+1,tokensAndCons.TKN_BRKT))
-                                IdTokens.append(self.ParserList(tokensAndCons.TKN_BRKT))
+                                IdTokens.append(stateNode.LToken(tokensAndCons.TKN_BRKT,LineN))
                                 StringAux2 = ''
                                 StringAux = ''
                             else:
                                 PosS = PosE+1
                                 TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_BRKT_L))
-                                IdTokens.append(self.ParserList(tokensAndCons.TKN_BRKT_L))
+                                IdTokens.append(stateNode.LToken(tokensAndCons.TKN_BRKT_L,LineN))
                                 StringAux = ''
                         except:
                             PosS = PosE+1
                             TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_BRKT_L))
-                            IdTokens.append(self.ParserList(tokensAndCons.TKN_BRKT_L))
+                            IdTokens.append(stateNode.LToken(tokensAndCons.TKN_BRKT_L,LineN))
                             StringAux = ''
                 elif (StringAux == '}'):
                         PosS = PosE+1
                         TokensFounded.append(self.fillAux(StringAux,LineN,PosS+1,PosE+1,tokensAndCons.TKN_BRKT_R))
-                        IdTokens.append(self.ParserList(tokensAndCons.TKN_BRKT_R))
+                        IdTokens.append(stateNode.LToken(tokensAndCons.TKN_BRKT_R,LineN))
                         StringAux = ''
                 if(AnalizedChar==True):
                     PosE+=1
