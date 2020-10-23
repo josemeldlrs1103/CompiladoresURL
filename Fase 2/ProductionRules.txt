@@ -19,23 +19,23 @@ CnsTp -> double
 CnsTp -> bool
 CnsTp -> string
 Heritage -> : ident HeritageP
-Heritage -> ''
+Heritage -> ~
 HeritageP -> , ident HeritageP
-HeritageP -> ''
+HeritageP -> ~
 FieldP -> Field FieldP
-FieldP -> ''
+FieldP -> ~
 Field -> Type ident ;
 Field -> FRoot ident ( Formals ) StmtBlock
 Field -> const CnsTp ident ;
 Proto -> Prototype Proto
-Proto -> ''
+Proto -> ~
 Prototype -> FRoot ident ( Formals ) ;
 SBPV -> Type ident ; SBPV
-SBPV -> ''
+SBPV -> ~
 SBPC -> const CnsTp ident ; SBPC
-SBPC -> ''
+SBPC -> ~
 SBPS -> Stmt SBPS
-SBPS -> ''
+SBPS -> ~
 Stmt -> Expr ;
 Stmt -> ;
 Stmt -> if ( Expr ) Stmt ElseStmt
@@ -46,9 +46,9 @@ Stmt -> return Expr ;
 Stmt -> Console . Writeline ( Expr ExPrint ) ;
 Stmt -> StmtBlock
 ElseStmt -> else Stmt
-ElseStmt -> ''
+ElseStmt -> ~
 ExPrint -> , Expr ExPrint
-ExPrint -> ''
+ExPrint -> ~
 Expr -> ident = ExprOr
 Expr -> ExprOr
 ExprOr -> ExprOr == ExprOrP

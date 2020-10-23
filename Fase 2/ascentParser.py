@@ -74,38 +74,65 @@ class ascentParser:
         statusStack.append('0')
         # pila de simbolos reconocidos
         simbolStack = []
-        for token in tokensList:
+        while len(tokensStack) > 0:
             # se obtiene el a evaluar de la pila
             actualStatus = SLRTable[int(statusStack[-1])]
             # se evalua que el token perteneza a dicho estado
-            inColection, current = self.tokenInSimbol(token, actualStatus.nonterminal, actualStatus.terminal)
+            inColection, current = self.tokenInSimbol(tokensStack[-1], actualStatus.nonterminal, actualStatus.terminal)
             if(inColection):
                 #se evalua que no haya conflicto
                 if(current.conflict):
                     print('se presento un conflicto') 
                 else:
-                    action = current.action
-                    if (action[0] == 's'):
-                        #se apila el estado
-                        statusStack.append(action[1:])
-                        #se apila el token
-                        simbolStack.append(current.simbol)
-                        #se desapila de la entrada
-                        tokensStack.pop()
-                        print('desplazamiento')
-                    elif (action[0] == 'r'): 
-                        print('reducicion')
-                    elif (action == 'acc'):
-                        print('aceptado')
-                    elif (isinstance(action, int)):
-                        print('ir a ')
-                    else:
-                        print('accion no valida')
+                   statusStack,simbolStack,tokensStack = self.doAction(current,statusStack,simbolStack,tokensStack,productionRules)
                     
             else:
                 print('error')
             
-
+    def doAction(self,current,statusStack,simbolStack,tokensStack,productionRules):
+        action = current.action
+        if (action[0] == 's'):
+            #se apila el estado
+            statusStack.append(action[1:])
+            #se apila el token
+            simbolStack.append(current.simbol)
+            #se desapila de la entrada
+            tokensStack.pop()
+            print('desplazamiento')
+        elif (action[0] == 'r'): 
+            # se obtiene la regla a reducir
+            regla = productionRules[int(action[1:])]
+            # se obtiene la cantidad de simbolos a reducir
+            back = 1 
+            for i in regla.right: 
+                if i == ' ': 
+                    back += 1
+            # se comprueba que no venga epsilon (se representa como '~')
+            if(regla.right not in '~'):
+                #se desapila de la pila de estados
+                del statusStack[-back:]
+                #se desapila de la pila de simbolos
+                del simbolStack[-back:]
+            tokensStack.append(regla.left)
+            print('reudccion')
+        elif (action.isnumeric()):
+            # se apila el estado
+            statusStack.append(action)
+            # se apila el NT a la pila de simbolos
+            simbolStack.append(tokensStack[-1])
+            # se desapila el Nt de la pila de entrada
+            del tokensStack[-1:]
+            print('ir a ')
+        elif (action == 'acc'):
+            if(len(tokensStack) > 0):
+                print('error, cadena no valida')
+            else:
+                print('cadena valida')
+            print('aceptado')
+        else:
+            print('accion no valida')
+        return statusStack,simbolStack,tokensStack
+        
     def tokenInSimbol(self,token,nonterminal,terminal):
         general = nonterminal + terminal 
         for element in general:
