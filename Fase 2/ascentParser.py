@@ -87,12 +87,11 @@ class ascentParser:
                 if(current.conflict):
                     print('se presento un conflicto') 
                 else:
-                   statusStack,simbolStack,tokensStack = self.doAction(current,statusStack,simbolStack,tokensStack,productionRules)
-                    
+                   statusStack,simbolStack,tokensStack = self.doAction(current,statusStack,simbolStack,tokensStack,productionRules,tokensList)
             else:
                 print('error')
             
-    def doAction(self,current,statusStack,simbolStack,tokensStack,productionRules):
+    def doAction(self,current,statusStack,simbolStack,tokensStack,productionRules,tokensList):
         action = current.action
         if (action[0] == 's'):
             #se apila el estado
@@ -101,6 +100,7 @@ class ascentParser:
             simbolStack.append(current.simbol)
             #se desapila de la entrada
             tokensStack.pop()
+            tokensList.pop()
             print('desplazamiento')
         elif (action[0] == 'r'): 
             # se obtiene la regla a reducir
@@ -117,6 +117,7 @@ class ascentParser:
                 #se desapila de la pila de simbolos
                 del simbolStack[-back:]
             tokensStack.append(regla.left)
+            tokensList.append(stateNode.LToken(tokensAndCons.TKN_DOT,LineN))
             print('reudccion')
         elif (action.isnumeric()):
             # se apila el estado
