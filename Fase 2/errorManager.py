@@ -9,3 +9,7 @@ def notValid (line, stringFound):
 def expected (line, col, open, close):
     result = "**Error encontrado en la línea: "+str(line)+" el par no esta completo, se estperaba: "+str(open)+" o "+str(close)+"***"
     return result
+
+def parserNotExpected (line, col, token):
+    result = 'Error en la linea ' + line + ' , ' + col +' Token no esperado: ' + token
+    return result

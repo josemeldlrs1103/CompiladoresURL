@@ -1,6 +1,7 @@
 import fileRW
 import stateNode
-
+import errorManager
+TokenQuantity = 0
 class ascentParser:
     def __init__(self,tokensList):
         Result, error = fileRW.readLRTable()
@@ -62,7 +63,12 @@ class ascentParser:
         
             self.evaluate(tokensList, productionRules,Table)
 
+    def countToken(self):
+        global TokenQuantity
+        TokenQuantity += 1
+
     def evaluate(self,tokensList,productionRules,SLRTable):
+
         toknstack =[]
         for Item in tokensList:
             toknstack.append(Item.Token)
@@ -78,20 +84,34 @@ class ascentParser:
         # pila de simbolos reconocidos
         simbolStack = []
         while len(tokensStack) > 0:
-            # se obtiene el a evaluar de la pila
-            actualStatus = SLRTable[int(statusStack[-1])]
-            # se evalua que el token perteneza a dicho estado
-            inColection, current = self.tokenInSimbol(tokensStack[-1], actualStatus.nonterminal, actualStatus.terminal)
-            if(inColection):
-                #se evalua que no haya conflicto
-                if(current.conflict):
-                    print('se presento un conflicto') 
+            if ((statusStack is not None) & (simbolStack is not None) & (tokensStack is not None)):
+                # se obtiene el a evaluar de la pila
+                actualStatus = SLRTable[int(statusStack[-1])]
+                # se evalua que el token perteneza a dicho estado
+                inColection, current = self.tokenInSimbol(tokensStack[-1], actualStatus.nonterminal, actualStatus.terminal)
+                if((inColection) & (current is not None )):
+                    #se evalua que no haya conflicto
+                    if(current.conflict):
+                        toDo = current.action.split('/')
+                        current.action = toDo[0]
+                        statusStack,simbolStack,tokensStack = self.doAction(current,statusStack,simbolStack,tokensStack,productionRules)
+                        print('se presento un conflicto') 
+                    else:
+                        statusStack,simbolStack,tokensStack = self.doAction(current,statusStack,simbolStack,tokensStack,productionRules)
                 else:
-                   statusStack,simbolStack,tokensStack = self.doAction(current,statusStack,simbolStack,tokensStack,productionRules,tokensList)
-            else:
-                print('error')
+                    if (len(tokensList) > TokenQuantity):
+                        failed = tokensList[TokenQuantity]
+                        print (errorManager.parserNotExpected(str(failed.Line),str(failed.Column),failed.Token))
+                        tokensStack.pop()
+                        self.countToken()
+                    else:
+                        print('Error EOF')
+                        self.countToken()
+                        tokensStack.pop()
+                        
+                    
             
-    def doAction(self,current,statusStack,simbolStack,tokensStack,productionRules,tokensList):
+    def doAction(self,current,statusStack,simbolStack,tokensStack,productionRules):
         action = current.action
         if (action[0] == 's'):
             #se apila el estado
@@ -100,7 +120,7 @@ class ascentParser:
             simbolStack.append(current.simbol)
             #se desapila de la entrada
             tokensStack.pop()
-            tokensList.pop()
+            self.countToken()
             print('desplazamiento')
         elif (action[0] == 'r'): 
             # se obtiene la regla a reducir
@@ -117,7 +137,6 @@ class ascentParser:
                 #se desapila de la pila de simbolos
                 del simbolStack[-back:]
             tokensStack.append(regla.left)
-            tokensList.append(stateNode.LToken(tokensAndCons.TKN_DOT,LineN))
             print('reudccion')
         elif (action.isnumeric()):
             # se apila el estado
@@ -128,13 +147,16 @@ class ascentParser:
             del tokensStack[-1:]
             print('ir a ')
         elif (action == 'acc'):
-            if(len(tokensStack) > 0):
+            if(len(tokensStack[-1]) =='$'):
                 print('error, cadena no valida')
             else:
-                print('cadena valida')
-            print('aceptado')
+                tokensStack.pop()
+                self.countToken()
+                print('aceptado, cadena valida') 
         else:
-            print('accion no valida')
+            print('accion no valida, no cumple con el formato del archivo')
+            return None, None, None
+
         return statusStack,simbolStack,tokensStack
         
     def tokenInSimbol(self,token,nonterminal,terminal):
@@ -142,7 +164,7 @@ class ascentParser:
         for element in general:
             if(token == element.simbol):
                 return True, element
-        return False
+        return False, None
             
 
     def getProductionRules(self):

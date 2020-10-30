@@ -17,6 +17,7 @@ class production:
         self.right = right
 #Clase para almacenar los tokens y la lína a la que corresponden
 class LToken:
-    def __init__(self,Token,Line):
+    def __init__(self,Token,Line,StartCol,EndCol):
         self.Token = Token
         self.Line = Line
+        self.Column = 'Col: '+ str(StartCol) + ' - ' + str(EndCol)
