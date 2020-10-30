@@ -1,6 +1,7 @@
 import fileRW
 import stateNode
 import errorManager
+# variable que servira para la recuperacion de errores, se ingremetna para identificar el numero de token consumido y asi obtener la linea en el archivo
 TokenQuantity = 0
 class ascentParser:
     def __init__(self,tokensList):
@@ -105,7 +106,7 @@ class ascentParser:
                         tokensStack.pop()
                         self.countToken()
                     else:
-                        print('Error EOF')
+                        print('Error, token no esperado. Se omite; '+ tokensList[TokenQuantity].Token)
                         self.countToken()
                         tokensStack.pop()
                         

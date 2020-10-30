@@ -2,79 +2,81 @@ Init -> Program
 Program -> Decl Program
 Program -> Decl
 Decl -> Type ident ;
-Decl -> FRoot ident ( Formals ) StmtBlock
-Decl -> const CnsTp ident ;
-Decl -> class ident Heritage { FieldP }
-Decl -> interface ident { Proto }
-Type -> CnsTp
+Decl -> void ident ( Formals ) StmtBlock
+Decl -> Type ident ( Formals ) StmtBlock
+Decl -> const ConstType ident ;
+Decl -> class ident Heritage { FieldX }
+Decl -> interface ident { PrototypeS }
+ConstType -> int
+ConstType -> double
+ConstType -> bool
+ConstType -> string
+Type -> ConstType
 Type -> ident
 Type -> Type []
-FRoot -> void
-FRoot -> Type
-Formals -> Type ident , Formals
-Formals -> Type ident
-StmtBlock -> { SBPV SBPC SBPS }
-CnsTp -> int
-CnsTp -> double
-CnsTp -> bool
-CnsTp -> string
 Heritage -> : ident HeritageP
 Heritage -> ~
 HeritageP -> , ident HeritageP
-HeritageP -> ~
-FieldP -> Field FieldP
-FieldP -> ~
+HeritageP -> ~		 
+Formals -> Type ident , Formals
+Formals -> Type ident
+FieldX -> Field FieldX
+FieldX -> ~  
 Field -> Type ident ;
-Field -> FRoot ident ( Formals ) StmtBlock
-Field -> const CnsTp ident ;
-Proto -> Prototype Proto
-Proto -> ~
-Prototype -> FRoot ident ( Formals ) ;
-SBPV -> Type ident ; SBPV
-SBPV -> ~
-SBPC -> const CnsTp ident ; SBPC
-SBPC -> ~
-SBPS -> Stmt SBPS
-SBPS -> ~
-Stmt -> Expr ;
+Field -> void ident ( Formals ) StmtBlock
+Field -> Type ident ( Formals ) StmtBlock
+Field -> const ConstType ident ;
+PrototypeS -> Prototype PrototypeS
+PrototypeS -> ~
+Prototype -> void ident ( Formals ) ;
+Prototype -> Type ident ( Formals ) ;
+StmtBlock -> { VariableDecl ConstDecl StmtX }
+VariableDecl -> Type ident ; VariableDecl
+VariableDecl -> ~
+ConstDecl -> const ConstType ident ; ConstDecl
+ConstDecl -> ~
+StmtX -> Stmt StmtX
+StmtX -> ~
+Stmt -> Expr ; 
 Stmt -> ;
 Stmt -> if ( Expr ) Stmt ElseStmt
 Stmt -> while ( Expr ) Stmt
 Stmt -> for ( Expr ; Expr ; Expr ) Stmt
 Stmt -> break ;
 Stmt -> return Expr ;
-Stmt -> Console . Writeline ( Expr ExPrint ) ;
+Stmt -> Console . Writeline ( ExprX ) ;
 Stmt -> StmtBlock
 ElseStmt -> else Stmt
 ElseStmt -> ~
-ExPrint -> , Expr ExPrint
-ExPrint -> ~
-Expr -> ident = ExprOr
-Expr -> ExprOr
-ExprOr -> ExprOr == ExprOrP
-ExprOr -> ExprOrP
-ExprOrP -> ExprOrP && ExprAnd
-ExprOrP -> ExprAnd
-ExprAnd -> ExprAnd < ExprAndP
-ExprAnd -> ExprAnd <= ExprAndP
-ExprAnd -> ExprAndP
-ExprAndP -> ExprAndP + ExprEquals
-ExprAndP -> ExprEquals
-ExprEquals -> ExprEquals * ExprEqualsP
-ExprEquals -> ExprEquals % ExprEqualsP
-ExprEquals -> ExprEqualsP
-ExprEqualsP -> - ExprComp
-ExprEqualsP -> ! ExprComp
-ExprEqualsP -> ExprComp
-ExprComp -> ExprComp . ident = ExprCompP
-ExprComp -> ExprComp . ident
-ExprComp -> ExprCompP
-ExprCompP -> ( Expr )
-ExprCompP -> this
-ExprCompP -> ident
-ExprCompP -> New ( ident )
-ExprCompP -> intConstant
-ExprCompP -> doubleConstant
-ExprCompP -> boolConstant
-ExprCompP -> stringConstant
-ExprCompP -> null
+ExprX -> Expr , ExprX
+ExprX -> Expr
+Expr -> ident = A
+Expr -> A
+A -> B AX
+AX -> == B AX
+AX -> ~
+B -> B && C
+B -> C
+C -> C < D
+C -> C <= D
+C -> D
+D -> D + E
+D -> E
+E -> E * F
+E -> E % F
+E -> F
+F -> - G
+F -> ! G
+F -> G
+G -> G . ident = Expr
+G -> G . ident
+G -> H
+H -> ( Expr )
+H -> this
+H -> ident
+H -> New ( ident )
+H -> T_intconst
+H -> T_doubleconst
+H -> T_boolconst
+H -> T_stringconst
+H -> null
