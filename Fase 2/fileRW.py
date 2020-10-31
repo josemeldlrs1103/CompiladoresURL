@@ -28,7 +28,7 @@ def readLRTable():
     Status = []
     path1 = os.path.join(os.path.abspath(os.path.dirname(__file__)),'LRTable.txt')
     try:
-        File1 = open(path1,'r')
+        File1 = open('LRTable.txt','r')
         Table = File1.readlines()
         if((len(Table))==0):
             Error='El archivo con la tabla LR está vacío'
@@ -44,7 +44,7 @@ def readProductionRules():
     Status = []
     path2 = os.path.join(os.path.abspath(os.path.dirname(__file__)),'ProductionRules.txt')
     try:
-        File1 = open(path2,'r')
+        File1 = open('ProductionRules.txt','r')
         Table = File1.readlines()
         if((len(Table))==0):
             Error='El archivo con las reglas de la gramática está vacío'

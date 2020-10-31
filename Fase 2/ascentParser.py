@@ -5,6 +5,8 @@ import errorManager
 TokenQuantity = 0
 class ascentParser:
     def __init__(self,tokensList):
+        #reseteo del contador al iniciar para no tener problemas al momento de ejecutar varios archivos seguidamente
+        TokenQuantity = 0
         Result, error = fileRW.readLRTable()
         Table = []
         if error: 
@@ -69,7 +71,7 @@ class ascentParser:
         TokenQuantity += 1
 
     def evaluate(self,tokensList,productionRules,SLRTable):
-        TokenQuantity = 0
+        ##TokenQuantity = 0
         toknstack =[]
         for Item in tokensList:
             toknstack.append(Item.Token)
@@ -96,24 +98,21 @@ class ascentParser:
                         toDo = current.action.split('/')
                         current.action = toDo[0]
                         statusStack,simbolStack,tokensStack = self.doAction(current,statusStack,simbolStack,tokensStack,productionRules)
-                        print('se presento un conflicto') 
+                        
                     else:
                         statusStack,simbolStack,tokensStack = self.doAction(current,statusStack,simbolStack,tokensStack,productionRules)
-                elif (current is  None ):
-                    print('Error, token no esperado. Se omite: '+ tokensList[TokenQuantity].Token)
-                    self.countToken()
-                    tokensStack.pop()
                 else:
                     if (len(tokensList) > TokenQuantity):
                         failed = tokensList[TokenQuantity]
-                        print (errorManager.parserNotExpected(str(failed.Line),str(failed.Column),failed.Token))
+                        print (errorManager.parserNotExpected(str(failed.Line),str(failed.Column),failed.Token) )
                         tokensStack.pop()
                         self.countToken()
                     else:
-                        print('Error, EOF')
+                        #print('Error, EOF')
                         self.countToken()
                         tokensStack.pop()
-                        
+            else:
+                print('Se ha producido un error' )          
                         
                     
             
@@ -127,7 +126,6 @@ class ascentParser:
             #se desapila de la entrada
             tokensStack.pop()
             self.countToken()
-            print('desplazamiento')
         elif (action[0] == 'r'): 
             # se obtiene la regla a reducir
             regla = productionRules[int(action[1:])]
@@ -143,7 +141,7 @@ class ascentParser:
                 #se desapila de la pila de simbolos
                 del simbolStack[-back:]
             tokensStack.append(regla.left)
-            print('reudccion')
+            
         elif (action.isnumeric()):
             # se apila el estado
             statusStack.append(action)
@@ -151,16 +149,15 @@ class ascentParser:
             simbolStack.append(tokensStack[-1])
             # se desapila el Nt de la pila de entrada
             del tokensStack[-1:]
-            print('ir a ')
         elif (action == 'acc'):
             if(len(tokensStack[-1]) =='$'):
-                print('error, cadena no valida')
+                print('Error, la cadena no termino en el estado de aceptacion' )
             else:
                 tokensStack.pop()
                 self.countToken()
-                print('aceptado, cadena valida') 
+                print('La cadena ingresada es válida') 
         else:
-            print('accion no valida, no cumple con el formato del archivo')
+            print('Se encontro una accion no valida, no cumple con el formato requerido para el archivo')
             return None, None, None
 
         return statusStack,simbolStack,tokensStack
