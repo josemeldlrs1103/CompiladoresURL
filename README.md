@@ -1,4 +1,4 @@
-# CompiladoresURL
+# CompiladoresURL.
 Se implementó un escáner semántico basado en c# basado en el lenguaje mini c#.
 ## Gramática implementada 📖
 La gramática modificada se encuentra en la carpeta, si desea verla ahora haga click en el siguiente enlace 
