@@ -1,0 +1,14 @@
+int numero ; 
+int contador;
+string miNombre ; 
+void inicio ( string miNombre ) 
+{ 
+if ( numero = contador)
+while ( numero = numero.numero) ; 
+}
+
+
+int Suma (int numero1 , int numero2 )
+{
+
+}

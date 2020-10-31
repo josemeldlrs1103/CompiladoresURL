@@ -1,0 +1,10 @@
+int helloWorld ( int count  ) 
+{  
+int b; 
+int c;
+	if(b = c + count){
+		string hola;
+		return hola;
+	}
+}
+
