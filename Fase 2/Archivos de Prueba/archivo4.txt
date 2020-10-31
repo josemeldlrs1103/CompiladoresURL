@@ -1,0 +1,10 @@
+
+void main( int holahola ) { 
+int mundo; double Auxiliar;
+}
+
+void yaMeAburri ( int compila ) {
+bool ganamoscompis;
+ganamoscompis = compila;
+return ganamoscompis;
+}
