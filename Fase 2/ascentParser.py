@@ -69,7 +69,7 @@ class ascentParser:
         TokenQuantity += 1
 
     def evaluate(self,tokensList,productionRules,SLRTable):
-
+        TokenQuantity = 0
         toknstack =[]
         for Item in tokensList:
             toknstack.append(Item.Token)
@@ -90,7 +90,7 @@ class ascentParser:
                 actualStatus = SLRTable[int(statusStack[-1])]
                 # se evalua que el token perteneza a dicho estado
                 inColection, current = self.tokenInSimbol(tokensStack[-1], actualStatus.nonterminal, actualStatus.terminal)
-                if((inColection) & (current is not None )):
+                if((inColection)):
                     #se evalua que no haya conflicto
                     if(current.conflict):
                         toDo = current.action.split('/')
@@ -99,6 +99,10 @@ class ascentParser:
                         print('se presento un conflicto') 
                     else:
                         statusStack,simbolStack,tokensStack = self.doAction(current,statusStack,simbolStack,tokensStack,productionRules)
+                elif (current is  None ):
+                    print('Error, token no esperado. Se omite: '+ tokensList[TokenQuantity].Token)
+                    self.countToken()
+                    tokensStack.pop()
                 else:
                     if (len(tokensList) > TokenQuantity):
                         failed = tokensList[TokenQuantity]
@@ -106,9 +110,10 @@ class ascentParser:
                         tokensStack.pop()
                         self.countToken()
                     else:
-                        print('Error, token no esperado. Se omite; '+ tokensList[TokenQuantity].Token)
+                        print('Error, EOF')
                         self.countToken()
                         tokensStack.pop()
+                        
                         
                     
             
