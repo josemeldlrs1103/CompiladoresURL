@@ -1,0 +1,9 @@
+static int numero; 
+string palabra ; 
+boolean bandera;
+static double bandera;
+
+
+void main( boolean lol ) { 
+int mundo; const double Auxiliar;
+};
