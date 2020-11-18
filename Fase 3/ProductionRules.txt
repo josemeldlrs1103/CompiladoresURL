@@ -1,43 +1,46 @@
-Init -> Program
+Start -> Program
 Program -> Decl Program
 Program -> Decl
 Decl -> Type ident ;
 Decl -> void ident ( Formals ) StmtBlock
 Decl -> Type ident ( Formals ) StmtBlock
-Decl -> const ConstType ident ;
-Decl -> class ident Heritage { FieldX }
+Decl -> const TYPEX ident ;
+Decl -> class ident Extends Implements { FieldX }
 Decl -> interface ident { PrototypeS }
-ConstType -> int
-ConstType -> double
-ConstType -> bool
-ConstType -> string
-Type -> ConstType
+TYPEX -> int
+TYPEX -> double
+TYPEX -> bool
+TYPEX -> string
+Type -> TYPEX
 Type -> ident
 Type -> Type []
-Heritage -> : ident HeritageP
-Heritage -> ~
-HeritageP -> , ident HeritageP
-HeritageP -> ~		 
 Formals -> Type ident , Formals
 Formals -> Type ident
+Extends -> : ident
+Extends -> ''
+Implements -> , Ident
+Implements -> ''
+Ident -> ident , Ident
+Ident -> ident
 FieldX -> Field FieldX
-FieldX -> ~  
+FieldX -> ''
 Field -> Type ident ;
 Field -> void ident ( Formals ) StmtBlock
 Field -> Type ident ( Formals ) StmtBlock
-Field -> const ConstType ident ;
+Field -> const TYPEX ident ;
 PrototypeS -> Prototype PrototypeS
-PrototypeS -> ~
+PrototypeS -> ''
 Prototype -> void ident ( Formals ) ;
 Prototype -> Type ident ( Formals ) ;
-StmtBlock -> { VariableDecl ConstDecl StmtX }
-VariableDecl -> Type ident ; VariableDecl
-VariableDecl -> ~
-ConstDecl -> const ConstType ident ; ConstDecl
-ConstDecl -> ~
-StmtX -> Stmt StmtX
-StmtX -> ~
-Stmt -> Expr ; 
+StmtBlock -> { VCM }
+VCM -> VariableDecl VCM
+VCM -> ConstDecl VCM
+VCM -> StmtX VCM
+VCM -> ''
+VariableDecl -> Type ident ;
+ConstDecl -> const TYPEX ident ;
+StmtX -> Stmt
+Stmt -> Expr ;
 Stmt -> ;
 Stmt -> if ( Expr ) Stmt ElseStmt
 Stmt -> while ( Expr ) Stmt
@@ -46,23 +49,27 @@ Stmt -> break ;
 Stmt -> return Expr ;
 Stmt -> Console . Writeline ( ExprX ) ;
 Stmt -> StmtBlock
+Stmt -> ident ( Actuals )
+Stmt -> ident . ident ( Actuals )
+Actuals -> Expr , Actuals
+Actuals -> Expr
 ElseStmt -> else Stmt
-ElseStmt -> ~
+ElseStmt -> ''
 ExprX -> Expr , ExprX
 ExprX -> Expr
 Expr -> ident = A
 Expr -> A
 A -> B AX
 AX -> == B AX
-AX -> ~
+AX -> ''
 B -> B && C
 B -> C
 C -> C < D
 C -> C <= D
 C -> D
-D -> D + E
+D -> D - E
 D -> E
-E -> E * F
+E -> E / F
 E -> E % F
 E -> F
 F -> - G
@@ -75,8 +82,8 @@ H -> ( Expr )
 H -> this
 H -> ident
 H -> New ( ident )
-H -> T_intconst
-H -> T_doubleconst
-H -> T_boolconst
-H -> T_stringconst
+H -> intConst
+H -> doubleConst
+H -> booleanConst
+H -> stringConst
 H -> null
