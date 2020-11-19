@@ -5,8 +5,8 @@ Decl -> Type ident ;
 Decl -> void ident ( Formals ) StmtBlock
 Decl -> Type ident ( Formals ) StmtBlock
 Decl -> const TYPEX ident ;
-Decl -> class ident Extends Implements { FieldX }
-Decl -> interface ident { PrototypeS }
+Decl -> class ident Heritage HeritagePrime { FieldX }
+Decl -> interface ident { ProtoPre }
 TYPEX -> int
 TYPEX -> double
 TYPEX -> bool
@@ -16,27 +16,27 @@ Type -> ident
 Type -> Type []
 Formals -> Type ident , Formals
 Formals -> Type ident
-Extends -> : ident
-Extends -> ''
-Implements -> , Ident
-Implements -> ''
+Heritage -> : ident
+Heritage -> ~
+HeritagePrime -> , Ident
+HeritagePrime -> ~
 Ident -> ident , Ident
 Ident -> ident
 FieldX -> Field FieldX
-FieldX -> ''
+FieldX -> ~
 Field -> Type ident ;
 Field -> void ident ( Formals ) StmtBlock
 Field -> Type ident ( Formals ) StmtBlock
 Field -> const TYPEX ident ;
-PrototypeS -> Prototype PrototypeS
-PrototypeS -> ''
+ProtoPre -> Prototype ProtoPre
+ProtoPre -> ~
 Prototype -> void ident ( Formals ) ;
 Prototype -> Type ident ( Formals ) ;
-StmtBlock -> { VCM }
-VCM -> VariableDecl VCM
-VCM -> ConstDecl VCM
-VCM -> StmtX VCM
-VCM -> ''
+StmtBlock -> { VariableCommon }
+VariableCommon -> VariableDecl VariableCommon
+VariableCommon -> ConstDecl VariableCommon
+VariableCommon -> StmtX VariableCommon
+VariableCommon -> ~
 VariableDecl -> Type ident ;
 ConstDecl -> const TYPEX ident ;
 StmtX -> Stmt
@@ -54,22 +54,22 @@ Stmt -> ident . ident ( Actuals )
 Actuals -> Expr , Actuals
 Actuals -> Expr
 ElseStmt -> else Stmt
-ElseStmt -> ''
+ElseStmt -> ~
 ExprX -> Expr , ExprX
 ExprX -> Expr
 Expr -> ident = A
 Expr -> A
 A -> B AX
 AX -> == B AX
-AX -> ''
+AX -> ~
 B -> B && C
 B -> C
 C -> C < D
 C -> C <= D
 C -> D
-D -> D - E
+D -> D + E
 D -> E
-E -> E / F
+E -> E * F
 E -> E % F
 E -> F
 F -> - G
