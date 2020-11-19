@@ -2,6 +2,7 @@ import tokensAndCons
 import re
 import errorManager
 import stateNode
+
 ErrorQuantity = 0
 class Lexer:
 
