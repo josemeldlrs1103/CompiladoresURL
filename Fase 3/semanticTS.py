@@ -27,11 +27,15 @@ class semanticTS:
                 if(element.Name in ableToSearch):
                     searchT = True
                     i=0
-                    while(searchT):
+                    while(searchT and i < len(TS)):
                         if(TS[i].Name == element.Name):
-                            #se obtiene el valor para dicho simbolo
-                            newVal.append(TS[i].Value)
-                            searchT = False
+                            if(TS[i].Token == element.Token):
+                                #se obtiene el valor para dicho simbolo
+                                newVal.append(TS[i].Value)
+                                searchT = False
+                            else:
+                                newVal.append('Los tipos no coinciden')
+                                searchT = False
                         i+=1
                 else:
                     newVal.append(element.Value)
@@ -55,29 +59,33 @@ class semanticTS:
             toBack = 0
             toDo = ''
             for item in newVal:
+                
                 if (toDo == ''):
                     if(item == '+' or item == '-' or item == '*' or item == '/' or item == '%'):
                         toDo = item
                     else:
                         toBack += int(item)
                 else:
-                    if (toDo == '+'):
-                        toDo = ''
-                        toBack += int(item)
-                    elif(toDo == '-'):
-                        toDo = ''
-                        toBack -= int(item)
-                    elif(toDo == '*'):
-                        toDo = ''
-                        toBack *= int(item)
-                    elif(toDo == '/'):
-                        toDo = ''
-                        toBack /= int(item)
-                    elif(toDo == '%'):
-                        toDo = ''
-                        toBack %= int(item)
+                    if(item.isnumeric()):
+                        if (toDo == '+'):
+                            toDo = ''
+                            toBack += int(item)
+                        elif(toDo == '-'):
+                            toDo = ''
+                            toBack -= int(item)
+                        elif(toDo == '*'):
+                            toDo = ''
+                            toBack *= int(item)
+                        elif(toDo == '/'):
+                            toDo = ''
+                            toBack /= int(item)
+                        elif(toDo == '%'):
+                            toDo = ''
+                            toBack %= int(item)
+                        else:
+                            return 'operador no valido para int'
                     else:
-                        return 'operador no valido para int'
+                        return 'error de tipos entre operadores'
             return str(toBack)
         elif (Type == 'double'  and '.' in newVal[0]):
             toBack = 0
@@ -89,29 +97,70 @@ class semanticTS:
                     else:
                         toBack += float(item)
                 else:
-                    if (toDo == '+'):
-                        toDo = ''
-                        toBack += float(item)
-                    elif(toDo == '-'):
-                        toDo = ''
-                        toBack -= float(item)
-                    elif(toDo == '*'):
-                        toDo = ''
-                        toBack *= float(item)
-                    elif(toDo == '/'):
-                        toDo = ''
-                        toBack /= float(item)
-                    elif(toDo == '%'):
-                        toDo = ''
-                        toBack %= float(item)
+                    # se permite sumar un float y un int para los datos double
+                    if('.' in item or item.isnumeric()):
+                        if (toDo == '+'):
+                            toDo = ''
+                            toBack += float(item)
+                        elif(toDo == '-'):
+                            toDo = ''
+                            toBack -= float(item)
+                        elif(toDo == '*'):
+                            toDo = ''
+                            toBack *= float(item)
+                        elif(toDo == '/'):
+                            toDo = ''
+                            toBack /= float(item)
+                        elif(toDo == '%'):
+                            toDo = ''
+                            toBack %= float(item)
+                        else:
+                            return 'operador no valido para double'
                     else:
-                        return 'operador no valido para double'
+                        return 'error de tipos entre operadores'
             return str(toBack)
         elif (Type == 'bool'):
-            if (newVal[0] == "false" or newVal[0] == "true"):
-                return newVal[0]
+            if (newVal[0] == 'false' or newVal[0] == 'true' or newVal[0] == 'null'):
+                toBack = ''
+                toDo = ''
+                for item in newVal:
+                    if (toDo == ''):
+                        if(item == '&&' or item == '||' or item == '!'):
+                            toDo = item
+                        else:
+                            toBack += item
+                    elif(item == 'false' or item == 'true'):
+                        if(toDo =='&&'):
+                            if toBack == item:
+                                toDo = ''
+                                toBack = 'true'
+                            else: 
+                                toDo = ''
+                                toBack = 'false'
+                        elif(toDo =='||'):
+                            if (toBack == 'true' or item == 'true'):
+                                toDo = ''
+                                toBack = 'true'
+                            else: 
+                                toDo = ''
+                                toBack = 'false'
+                        elif(toDo =='!'):
+                            if(item == 'true'):
+                                toDo =''
+                                toBack = 'false'
+                            elif(item == 'false'):
+                                toDo =''
+                                toBack = 'true'
+                            else:
+                                return 'la negación no es valida'
+                        else:
+                            return 'operador no valido para bool'
+                    elif(item == 'null'):
+                        toDo = ''
+                        toBack = 'null'
+                return toBack
             else:
-                return "valor no valido para bool"
+                return 'valor no valido para bool'
         elif (Type == 'string'  and '"' in newVal[0]):
             toBack = ''
             toDo = ''
@@ -129,4 +178,4 @@ class semanticTS:
                     toBack += item
             return '"'+toBack.replace('"','') + '"'
         else:
-            return 'error de tipos'       
+            return 'error de tipos en variable'  
