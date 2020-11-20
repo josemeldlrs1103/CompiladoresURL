@@ -24,7 +24,17 @@ class semanticTS:
                         toMod = previous.Name
             elif ((toMod is not None) and (element.Token not in tokensAndCons.TKN_SEMICOLON)):
                 #se concatena el nuevo valor hasta encontrar un punto y coma
-                newVal.append(element.Value)
+                if(element.Name in ableToSearch):
+                    searchT = True
+                    i=0
+                    while(searchT):
+                        if(TS[i].Name == element.Name):
+                            #se obtiene el valor para dicho simbolo
+                            newVal.append(TS[i].Value)
+                            searchT = False
+                        i+=1
+                else:
+                    newVal.append(element.Value)
             elif ((toMod is not None) and (element.Token in tokensAndCons.TKN_SEMICOLON)):
                 #se busca el simbolo a modificar
                 i = 0
@@ -52,14 +62,19 @@ class semanticTS:
                         toBack += int(item)
                 else:
                     if (toDo == '+'):
+                        toDo = ''
                         toBack += int(item)
                     elif(toDo == '-'):
+                        toDo = ''
                         toBack -= int(item)
                     elif(toDo == '*'):
+                        toDo = ''
                         toBack *= int(item)
                     elif(toDo == '/'):
+                        toDo = ''
                         toBack /= int(item)
                     elif(toDo == '%'):
+                        toDo = ''
                         toBack %= int(item)
                     else:
                         return 'operador no valido para int'
@@ -75,14 +90,19 @@ class semanticTS:
                         toBack += float(item)
                 else:
                     if (toDo == '+'):
+                        toDo = ''
                         toBack += float(item)
                     elif(toDo == '-'):
+                        toDo = ''
                         toBack -= float(item)
                     elif(toDo == '*'):
+                        toDo = ''
                         toBack *= float(item)
                     elif(toDo == '/'):
+                        toDo = ''
                         toBack /= float(item)
                     elif(toDo == '%'):
+                        toDo = ''
                         toBack %= float(item)
                     else:
                         return 'operador no valido para double'
@@ -100,10 +120,12 @@ class semanticTS:
                     if(item == '+'):
                         toDo = item 
                     elif('"' in item):
+                        toDo = ''
                         toBack+=item
                     else:
                         return 'operador no valido para string'
                 else:
+                    toDo =''
                     toBack += item
             return '"'+toBack.replace('"','') + '"'
         else:

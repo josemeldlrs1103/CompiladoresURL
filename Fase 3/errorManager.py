@@ -11,5 +11,5 @@ def expected (line, col, open, close):
     return result
 
 def parserNotExpected (line, col, token):
-    result = 'Error en la linea ' + line + ' , ' + col +' Token no esperado: ' + token
+    result = ''#Error en la linea ' + line + ' , ' + col +' Token no esperado: ' + token
     return result

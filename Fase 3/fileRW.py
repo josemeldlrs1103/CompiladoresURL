@@ -26,7 +26,6 @@ def readLRTable():
     Error = None
     Table = None
     Status = []
-    path1 = os.path.join(os.path.abspath(os.path.dirname(__file__)),'LRTable.txt')
     try:
         File1 = open('LRTable.txt','r')
         Table = File1.readlines()
@@ -42,7 +41,6 @@ def readProductionRules():
     Error = None
     Table = None
     Status = []
-    path2 = os.path.join(os.path.abspath(os.path.dirname(__file__)),'ProductionRules.txt')
     try:
         File1 = open('ProductionRules.txt','r')
         Table = File1.readlines()
