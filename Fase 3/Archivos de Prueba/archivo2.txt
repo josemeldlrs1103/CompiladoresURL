@@ -1,9 +1,0 @@
-int fer ( int oliva  ) 
-{  
-int b; 
-int c;
-	if(b = c){
-		return oliva;
-	}
-}
-
