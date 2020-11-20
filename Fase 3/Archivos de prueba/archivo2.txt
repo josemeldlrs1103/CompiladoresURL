@@ -1,0 +1,13 @@
+class perimetro (){
+double circun;
+
+const double pi;
+
+const double radio;
+
+pi = 3.1416; /*Se guarda la constante pi con valor 3.1416 */
+
+radio = 20.5; /* Se guarda la constante radio con valor 20.5 */
+
+circun = pi*2*radio; /*Se guarda la variable circun con valor 128.8056*/
+}

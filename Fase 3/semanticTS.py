@@ -8,12 +8,14 @@ class semanticTS:
         newVal = []
         ableToSearch = ['int','double','bool','string','const']
         ##se añaden todos los tokens a la la TS
+        Const = False
         for element in tokensList:
+            
             if((previous is not None) and (previous.Name in ableToSearch) and toMod is None):
                 # se verifica que el token sea apto para añadirlo a la TS
                 if (element.Token in tokensAndCons.AbleToTS and element.Name not in tokensAndCons.excludedName):
                     # se añade la declaración
-                    TS.append(stateNode.elementTS(element.Token, previous.Name ,element.Name, element.Value, element.Line,element.Column))
+                    TS.append(stateNode.elementTS(element.Token, previous.Name ,element.Name, element.Value, Const,element.Line,element.Column,1))
                     if(element.Token == tokensAndCons.TKN_IDENTIFIER):
                         # se añade el identificador a los permitidos
                         ableToSearch.append(str(element.Name))
@@ -43,13 +45,21 @@ class semanticTS:
                 #se busca el simbolo a modificar
                 i = 0
                 while (toMod is not None):
-                    if(TS[i].Name == toMod):
+                    if(TS[i].Name == toMod and TS[i].Mod == 1):
                         #se obtiene el valor para dicho simbolo
                         TS[i].Value = self.getValue(newVal, TS[i].Type)
+                        if(TS[i].Const == True):
+                            TS[i].Mod = 0
                         toMod = None
+                        
                         newVal =[]
                     i+=1
+            if((previous is not None) and (previous.Name == 'const')):
+                Const = True
+            else:
+                Const = False
             previous = element
+            
 
         print('debug')
 

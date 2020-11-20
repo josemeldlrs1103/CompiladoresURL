@@ -25,10 +25,12 @@ class LToken:
         self.Column = 'Col: '+ str(StartCol) + ' - ' + str(EndCol)
 #Clase para la TS
 class elementTS:
-    def __init__(self,Token,Type,Name,Value,Line,Column):
+    def __init__(self,Token,Type,Name,Value,Const,Line,Column,Mod):
         self.Token = Token
         self.Type = Type
         self.Name = Name
         self.Value = Value
         self.Line = Line
         self.Column = Column
+        self.Const = Const
+        self.Mod = Mod
