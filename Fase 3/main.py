@@ -1,6 +1,7 @@
 import fileRW 
 import lexer
 import ascentParser
+import semanticTS
 while True:
     Text = input('Ingrese la ruta del archivo a analizar\r\n>')
     Result, error = fileRW.read(Text)
@@ -15,3 +16,4 @@ while True:
         else:
             print('El archivo no cuenta con errores lexicos.')
             ascentParser.ascentParser(TokensTab)
+            semanticTS.semanticTS(TokensTab)

@@ -25,9 +25,9 @@ class LToken:
         self.Column = 'Col: '+ str(StartCol) + ' - ' + str(EndCol)
 #Clase para la TS
 class elementTS:
-    def __init__(self,Token,Name,Value,Line,StartCol,EndCol):
+    def __init__(self,Token,Name,Value,Line,Column):
         self.Token = Token
         self.Name = Name
         self.Value = Value
         self.Line = Line
-        self.Column = 'Col: '+ str(StartCol) + ' - ' + str(EndCol)
+        self.Column = Column

@@ -153,7 +153,7 @@ class Lexer:
                         elif(LastRecognition == 'identifier'):
                             if(DiscardChars==False):
                                 TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,'T_'+LastRecognition))
-                                IdTokens.append(stateNode.LToken('T_LastRecognition',StringAnalizer,None,LineN,PosS+1,PosE))
+                                IdTokens.append(stateNode.LToken('T_'+LastRecognition,StringAnalizer,None,LineN,PosS+1,PosE))
                             if(StringAux!='' and StringAux!=' ' and StringAux!='\t' and StringAux!='\n' and StringAux!='+' and StringAux!='-' and StringAux!='*' and StringAux!='/' and StringAux!='%' and StringAux!='<' and StringAux!='>' and StringAux!='=' and StringAux!='!' and StringAux!='&' and StringAux!='|' and StringAux!=';' and StringAux!=',' and StringAux!='.' and StringAux!='(' and StringAux!=')' and StringAux!='[' and StringAux!=']' and StringAux!='{' and StringAux!='}'):
                                 DiscardChars = True
                             else:
@@ -166,7 +166,6 @@ class Lexer:
                                  AnalizedChar = False
                         elif(LastRecognition == 'Integer'):
                             TokensFounded.append(self.fillAux(StringAnalizer,LineN,PosS+1,PosE,tokensAndCons.TKN_INTCONST))
-                            IdTokens.append(stateNode.LToken)
                             IdTokens.append(stateNode.LToken(tokensAndCons.TKN_INTCONST,StringAnalizer,StringAnalizer,LineN,PosS+1,PosE))
                             if(StringAnalizer!='' and StringAnalizer!=' ' and StringAnalizer!='\t' and StringAnalizer!='\n' and StringAnalizer!='+' and StringAnalizer!='-' and StringAnalizer!='*' and StringAnalizer!='/' and StringAnalizer!='%' and StringAnalizer!='<' and StringAnalizer!='>' and StringAnalizer!='=' and StringAnalizer!='!' and StringAnalizer!='&' and StringAnalizer!='|' and StringAnalizer!=';' and StringAnalizer!=',' and StringAnalizer!='.' and StringAnalizer!='(' and StringAnalizer!=')' and StringAnalizer!='[' and StringAnalizer!=']' and StringAnalizer!='{' and StringAnalizer!='}'):
                                 AnalizedChar = False

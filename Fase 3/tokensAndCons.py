@@ -81,3 +81,7 @@ MultiLineCommentsStep1 = r'^\/\*[^\*\/]*$'
 MultiLineCommentsStep2 = r'^\/\*[^\*\/]*\*$'
 MultiLineCommentsStep3 = r'^\/\*[^\*\/]*\*\/$'
 ExtraCaseComment = r'^\/\*(.)*$'
+
+#TS
+AbleToTS = [TKN_INT, TKN_DOUBLE, TKN_BOOLEAN, TKN_STRING, TKN_INTCONST, TKN_DOUBCONST, TKN_BOOLCONST, TKN_STRCONST, TKN_IDENTIFIER]
+excludedName = ['int','double','bool','string','const']
