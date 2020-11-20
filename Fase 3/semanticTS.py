@@ -24,6 +24,7 @@ class semanticTS:
                     if (previous.Name in ableToSearch):
                         # se obtiene el nombre del simbolo al que se modificara su valor
                         toMod = previous.Name
+             
             elif ((toMod is not None) and (element.Token not in tokensAndCons.TKN_SEMICOLON)):
                 #se concatena el nuevo valor hasta encontrar un punto y coma
                 if(element.Name in ableToSearch):
@@ -54,6 +55,8 @@ class semanticTS:
                         
                         newVal =[]
                     i+=1
+            elif((previous is not None) and (element.Name not in ableToSearch) and len(ableToSearch)>5 and (element.Name not in tokensAndCons.excludedName and element.Token in tokensAndCons.TKN_IDENTIFIER )):
+                    print ('el elemento ' + element.Name +' no ha sido declarado')  
             if((previous is not None) and (previous.Name == 'const')):
                 Const = True
             else:
