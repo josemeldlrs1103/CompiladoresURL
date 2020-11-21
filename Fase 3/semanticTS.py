@@ -75,8 +75,10 @@ class semanticTS:
             #Creación de la clase para impresión de lista
             from prettytable import PrettyTable
             SymbolT = PrettyTable()
+            Historial = PrettyTable()
             #Definición de los campos de la tabla
-            SymbolT.field_names = ["Nombre","Tipo","Valor","Linea","Columna"]
+            SymbolT.field_names = ["Nombre","Tipo","Valor","Linea","Espacio columna"]
+            Historial.field_names = ["Nombre","Tipo","Valor","Linea","Espacio Columna"]
             #agregando las líneas a imprimir en la tabla
             for Variable in TS:
                 if (Variable.Const == True):
@@ -90,10 +92,23 @@ class semanticTS:
                         SymbolT.add_rows([[Variable.Name, Variable.Type, Variable.Value, Variable.Line,Variable.Column]])
                     else:
                          SymbolT.add_rows([[Variable.Name, Variable.Type, "Null", Variable.Line,Variable.Column]])
-            SymbolT.align = "l"
+            for Registro in TSLog:
+                if (Registro.Const == True):
+                    NuevoTipo = "Const"+Registro.Type
+                    if (Registro.Value != None):
+                        Historial.add_rows([[Registro.Name, NuevoTipo, Registro.Value, Registro.Line,Registro.Column]])
+                    else:
+                        Historial.add_rows([[Registro.Name, Registro, "Null", Registro.Line,Registro.Column]])
+                else:
+                    if (Registro.Value != None):
+                        Historial.add_rows([[Registro.Name, Registro.Type, Registro.Value, Registro.Line,Registro.Column]])
+                    else:
+                         Historial.add_rows([[Registro.Name, Registro.Type, "Null", Registro.Line,Registro.Column]])
             CadenaGuardar = SymbolT.get_string()
+            CadenaHistorial= Historial.get_string()
             file = open(os.path.splitext(Texto)[0] + ".out", "w")
             file.write("Historial\n")
+            file.write(CadenaHistorial+"\n")
             file.write("Tablafinal\n")
             file.write(CadenaGuardar + "\n")
             file.close()
