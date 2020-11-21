@@ -4,13 +4,14 @@ class semanticTS:
     def __init__(self,tokensList):
         TS = []
         previous = None
+        previousP = None
         toMod = None
+        funcToMod = None
         newVal = []
         ableToSearch = ['int','double','bool','string','const']
         ##se añaden todos los tokens a la la TS
         Const = False
         for element in tokensList:
-            
             if((previous is not None) and (previous.Name in ableToSearch) and toMod is None):
                 # se verifica que el token sea apto para añadirlo a la TS
                 if (element.Token in tokensAndCons.AbleToTS and element.Name not in tokensAndCons.excludedName):
@@ -24,7 +25,9 @@ class semanticTS:
                     if (previous.Name in ableToSearch):
                         # se obtiene el nombre del simbolo al que se modificara su valor
                         toMod = previous.Name
-             
+            #elif (element.Token in tokensAndCons.TKN_PAREN_L and previous is not None):
+             #   if (previous.Token in tokensAndCons.TKN_IDENTIFIER and previousP.Token in tokensAndCons.AbleToTS):
+              #      funcToMod = previous.Name
             elif ((toMod is not None) and (element.Token not in tokensAndCons.TKN_SEMICOLON)):
                 #se concatena el nuevo valor hasta encontrar un punto y coma
                 if(element.Name in ableToSearch):
@@ -45,7 +48,7 @@ class semanticTS:
             elif ((toMod is not None) and (element.Token in tokensAndCons.TKN_SEMICOLON)):
                 #se busca el simbolo a modificar
                 i = 0
-                while (toMod is not None):
+                while (toMod is not None) and  i < len(TS):
                     if(TS[i].Name == toMod and TS[i].Mod == 1):
                         #se obtiene el valor para dicho simbolo
                         TS[i].Value = self.getValue(newVal, TS[i].Type)
@@ -55,12 +58,13 @@ class semanticTS:
                         
                         newVal =[]
                     i+=1
-            elif((previous is not None) and (element.Name not in ableToSearch) and len(ableToSearch)>5 and (element.Name not in tokensAndCons.excludedName and element.Token in tokensAndCons.TKN_IDENTIFIER )):
-                    print ('el elemento ' + element.Name +' no ha sido declarado')  
+            elif((previous is not None) and (element.Token not in tokensAndCons.TKN_IDENTIFIER)and (element.Name not in ableToSearch) and len(ableToSearch)>5 and (element.Name not in tokensAndCons.excludedName and element.Token in tokensAndCons.TKN_IDENTIFIER )):
+                    print ('El elemento ' + element.Name +' no ha sido declarado previamente')  
             if((previous is not None) and (previous.Name == 'const')):
                 Const = True
             else:
                 Const = False
+            previousP = previous
             previous = element
             
 
@@ -72,33 +76,33 @@ class semanticTS:
             toBack = 0
             toDo = ''
             for item in newVal:
-                
-                if (toDo == ''):
-                    if(item == '+' or item == '-' or item == '*' or item == '/' or item == '%'):
-                        toDo = item
-                    else:
-                        toBack += int(item)
-                else:
-                    if(item.isnumeric()):
-                        if (toDo == '+'):
-                            toDo = ''
-                            toBack += int(item)
-                        elif(toDo == '-'):
-                            toDo = ''
-                            toBack -= int(item)
-                        elif(toDo == '*'):
-                            toDo = ''
-                            toBack *= int(item)
-                        elif(toDo == '/'):
-                            toDo = ''
-                            toBack /= int(item)
-                        elif(toDo == '%'):
-                            toDo = ''
-                            toBack %= int(item)
+                if (item is not None):
+                    if (toDo == ''):
+                        if(item == '+' or item == '-' or item == '*' or item == '/' or item == '%'):
+                            toDo = item
                         else:
-                            return 'operador no valido para int'
+                            toBack += int(item)
                     else:
-                        return 'error de tipos entre operadores'
+                        if(item.isnumeric()):
+                            if (toDo == '+'):
+                                toDo = ''
+                                toBack += int(item)
+                            elif(toDo == '-'):
+                                toDo = ''
+                                toBack -= int(item)
+                            elif(toDo == '*'):
+                                toDo = ''
+                                toBack *= int(item)
+                            elif(toDo == '/'):
+                                toDo = ''
+                                toBack /= int(item)
+                            elif(toDo == '%'):
+                                toDo = ''
+                                toBack %= int(item)
+                            else:
+                                return 'Se encontró un operador no valido para int: ' + str(toDo)
+                        else:
+                            return 'Error de tipos en variable, se trató de emparejar ' + str(Type) +' y ' +str(self.getTypeForVal(item))
             return str(toBack)
         elif (Type == 'double'  and '.' in newVal[0]):
             toBack = 0
@@ -128,9 +132,9 @@ class semanticTS:
                             toDo = ''
                             toBack %= float(item)
                         else:
-                            return 'operador no valido para double'
+                            return 'Se encontró un operador no valido para double: ' + str(toDo)
                     else:
-                        return 'error de tipos entre operadores'
+                        return 'Error de tipos en variable, se trató de emparejar ' + str(Type) +' y ' +str(self.getTypeForVal(item))
             return str(toBack)
         elif (Type == 'bool'):
             if (newVal[0] == 'false' or newVal[0] == 'true' or newVal[0] == 'null'):
@@ -167,7 +171,7 @@ class semanticTS:
                             else:
                                 return 'la negación no es valida'
                         else:
-                            return 'operador no valido para bool'
+                            return 'Se encontró un operador no valido para bool: ' + str(toDo)
                     elif(item == 'null'):
                         toDo = ''
                         toBack = 'null'
@@ -185,10 +189,23 @@ class semanticTS:
                         toDo = ''
                         toBack+=item
                     else:
-                        return 'operador no valido para string'
+                        return 'Se encontró un operador no valido para string: ' + str(toDo)
                 else:
                     toDo =''
                     toBack += item
             return '"'+toBack.replace('"','') + '"'
         else:
-            return 'error de tipos en variable'  
+            return 'Error de tipos en variable, se trató de emparejar ' + str(Type) +' y ' +str(self.getTypeForVal(newVal))
+
+    def getTypeForVal(self,newVal):
+        for item in newVal:
+            if (item.isnumeric()):
+                return 'int'
+            elif('.' in item):
+                return 'double'
+            elif('"' in item):
+                return 'string'
+            elif (item == 'false' or item == 'true' or item == 'null'):
+                return 'bool'
+            else:
+                return 'tipo desconocido'
