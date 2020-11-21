@@ -1,0 +1,13 @@
+Historial
+Tablafinal
++----------+--------+----------------------------------------------------------------+-------+--------------+
+| Nombre   | Tipo   | Valor                                                          | Linea | Columna      |
++----------+--------+----------------------------------------------------------------+-------+--------------+
+| y        | double | 6.2                                                            | 5     | Col: 23 - 23 |
+| positivo | bool   | false                                                          | 8     | Col: 7 - 14  |
+| a1       | int    | 12                                                             | 10    | Col: 13 - 14 |
+| a2       | int    | Error de tipos en variable, se trató de emparejar int y string | 11    | Col: 6 - 7   |
+| sumando  | int    | 9                                                              | 12    | Col: 6 - 12  |
+| mensaje  | string | "hola mundo, soy Fernando"                                     | 13    | Col: 9 - 15  |
+| nombre   | string | ", soy Fernando"                                               | 14    | Col: 9 - 14  |
++----------+--------+----------------------------------------------------------------+-------+--------------+

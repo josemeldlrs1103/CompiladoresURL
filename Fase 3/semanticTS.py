@@ -4,6 +4,7 @@ import os
 class semanticTS:
     def __init__(self,tokensList,Texto):
         TS = []
+        TSLog = []
         previous = None
         previousP = None
         toMod = None
@@ -18,6 +19,7 @@ class semanticTS:
                 if (element.Token in tokensAndCons.AbleToTS and element.Name not in tokensAndCons.excludedName):
                     # se añade la declaración
                     TS.append(stateNode.elementTS(element.Token, previous.Name ,element.Name, element.Value, Const,element.Line,element.Column,1))
+                    TSLog.append(stateNode.elementTS(element.Token, previous.Name ,element.Name, element.Value, Const,element.Line,element.Column,1))
                     if(element.Token == tokensAndCons.TKN_IDENTIFIER):
                         # se añade el identificador a los permitidos
                         ableToSearch.append(str(element.Name))
@@ -53,8 +55,10 @@ class semanticTS:
                     if(TS[i].Name == toMod and TS[i].Mod == 1):
                         #se obtiene el valor para dicho simbolo
                         TS[i].Value = self.getValue(newVal, TS[i].Type)
+                        TSLog.append(TS[i])
                         if(TS[i].Const == True):
                             TS[i].Mod = 0
+                        
                         toMod = None
                         
                         newVal =[]

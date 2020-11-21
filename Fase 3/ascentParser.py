@@ -1,6 +1,6 @@
 import fileRW
 import stateNode
-import errorManager
+#import errorManager
 # variable que servira para la recuperacion de errores, se ingremetna para identificar el numero de token consumido y asi obtener la linea en el archivo
 TokenQuantity = 0
 class ascentParser:
@@ -104,7 +104,7 @@ class ascentParser:
                 else:
                     if (len(tokensList) > TokenQuantity):
                         failed = tokensList[TokenQuantity]
-                        print (errorManager.parserNotExpected(str(failed.Line),str(failed.Column),failed.Token) )
+                        #print (errorManager.parserNotExpected(str(failed.Line),str(failed.Column),failed.Token) )
                         tokensStack.pop()
                         self.countToken()
                     else:
@@ -155,7 +155,7 @@ class ascentParser:
             else:
                 tokensStack.pop()
                 self.countToken()
-                print('La cadena ingresada es válida') 
+                print('La cadena ingresada es válida sintacticamente') 
         else:
             print('Se encontro una accion no valida, no cumple con el formato requerido para el archivo')
             return None, None, None
