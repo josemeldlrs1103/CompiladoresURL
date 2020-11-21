@@ -1,6 +1,8 @@
 import stateNode
 import tokensAndCons
 import os
+# global para registro de errores
+errors = []
 class semanticTS:
     def __init__(self,tokensList,Texto):
         TS = []
@@ -64,6 +66,7 @@ class semanticTS:
                         newVal =[]
                     i+=1
             elif((previous is not None) and (element.Token not in tokensAndCons.TKN_IDENTIFIER)and (element.Name not in ableToSearch) and len(ableToSearch)>5 and (element.Name not in tokensAndCons.excludedName and element.Token in tokensAndCons.TKN_IDENTIFIER )):
+                    errors.append('El elemento ' + element.Name +' no ha sido declarado previamente')  
                     print ('El elemento ' + element.Name +' no ha sido declarado previamente')  
             if((previous is not None) and (previous.Name == 'const')):
                 Const = True
@@ -109,9 +112,14 @@ class semanticTS:
             file = open(os.path.splitext(Texto)[0] + ".out", "w")
             file.write("Historial\n")
             file.write(CadenaHistorial+"\n")
+            if(errors is not None):
+                for er in errors:
+                    file.write(er + "\n")
             file.write("Tablafinal\n")
             file.write(CadenaGuardar + "\n")
+           
             file.close()
+            print('La tabla de simbolos obtenida es la siguiente:\n')
             print(SymbolT.get_string())
 
 
@@ -145,8 +153,10 @@ class semanticTS:
                                 toDo = ''
                                 toBack %= int(item)
                             else:
+                                errors.append('Se encontró un operador no valido para int: ' + str(toDo))
                                 return 'Se encontró un operador no valido para int: ' + str(toDo)
                         else:
+                            errors.append('Error de tipos en variable, se trató de emparejar ' + str(Type) +' y ' +str(self.getTypeForVal(item)))
                             return 'Error de tipos en variable, se trató de emparejar ' + str(Type) +' y ' +str(self.getTypeForVal(item))
             return str(toBack)
         elif (Type == 'double'  and '.' in newVal[0]):
@@ -177,8 +187,10 @@ class semanticTS:
                             toDo = ''
                             toBack %= float(item)
                         else:
+                            errors.append('Se encontró un operador no valido para double: ' + str(toDo))
                             return 'Se encontró un operador no valido para double: ' + str(toDo)
                     else:
+                        errors.append('Error de tipos en variable, se trató de emparejar ' + str(Type) +' y ' +str(self.getTypeForVal(item)))
                         return 'Error de tipos en variable, se trató de emparejar ' + str(Type) +' y ' +str(self.getTypeForVal(item))
             return str(toBack)
         elif (Type == 'bool'):
@@ -216,6 +228,7 @@ class semanticTS:
                             else:
                                 return 'la negación no es valida'
                         else:
+                            errors.append('Se encontró un operador no valido para bool: ' + str(toDo))
                             return 'Se encontró un operador no valido para bool: ' + str(toDo)
                     elif(item == 'null'):
                         toDo = ''
@@ -234,12 +247,14 @@ class semanticTS:
                         toDo = ''
                         toBack+=item
                     else:
+                        errors.append('Se encontró un operador no valido para string: ' + str(toDo))
                         return 'Se encontró un operador no valido para string: ' + str(toDo)
                 else:
                     toDo =''
                     toBack += item
             return '"'+toBack.replace('"','') + '"'
         else:
+            errors.append('Error de tipos en variable, se trató de emparejar ' + str(Type) +' y ' +str(self.getTypeForVal(newVal)))
             return 'Error de tipos en variable, se trató de emparejar ' + str(Type) +' y ' +str(self.getTypeForVal(newVal))
 
     def getTypeForVal(self,newVal):
