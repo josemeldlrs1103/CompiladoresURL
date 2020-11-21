@@ -10,7 +10,12 @@ Para la ejecucción correcta los archivos "LRTable.txt" y "ProductionRules.txt" 
 Al terminar la ejecución el programa escribe un archivo con las tablas generadas en la misma ubicación que el archivo original ingresado.
 ## Librería para apoyo visual 👀
 Al imprimir la tabla del historial de la tabla de símbolos y la tabla de símbolos se utilizó una librería externa que ayuda con la impresión en forma de tabla en su representación ascii    **Link al sitio de la librería utilizada** [Pretty table](https://pypi.org/project/prettytable/)
+## Representación de tabla 📝
+ -----------------------------------------------------<br/>
+|Nombre|  Tipo  |      Valor      |  Línea  |  Espacio Columna  |<br/>
+|---------+-----+------+------+-------------------|
 ## Autores ✒️
 * **José Fernando Oliva Morales 1251518** [feroliv4z](https://github.com/feroliv4z)
 * **José Eduardo Meléndez De la Rosa 1059918** [josemel1103](https://github.com/josemeldlrs1103)
+
 
