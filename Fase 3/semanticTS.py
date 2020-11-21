@@ -1,7 +1,8 @@
 import stateNode
 import tokensAndCons
+import os
 class semanticTS:
-    def __init__(self,tokensList):
+    def __init__(self,tokensList,Texto):
         TS = []
         previous = None
         previousP = None
@@ -66,9 +67,34 @@ class semanticTS:
                 Const = False
             previousP = previous
             previous = element
-            
+        if TS is not None:
+            #Creación de la clase para impresión de lista
+            from prettytable import PrettyTable
+            SymbolT = PrettyTable()
+            #Definición de los campos de la tabla
+            SymbolT.field_names = ["Nombre","Tipo","Valor","Linea","Columna"]
+            #agregando las líneas a imprimir en la tabla
+            for Variable in TS:
+                if (Variable.Const == True):
+                    NuevoTipo = "Const"+Variable.Type
+                    if (Variable.Value != None):
+                        SymbolT.add_rows([[Variable.Name, NuevoTipo, Variable.Value, Variable.Line,Variable.Column]])
+                    else:
+                        SymbolT.add_rows([[Variable.Name, NuevoTipo, "Null", Variable.Line,Variable.Column]])
+                else:
+                    if (Variable.Value != None):
+                        SymbolT.add_rows([[Variable.Name, Variable.Type, Variable.Value, Variable.Line,Variable.Column]])
+                    else:
+                         SymbolT.add_rows([[Variable.Name, Variable.Type, "Null", Variable.Line,Variable.Column]])
+            SymbolT.align = "l"
+            CadenaGuardar = SymbolT.get_string()
+            file = open(os.path.splitext(Texto)[0] + ".out", "w")
+            file.write("Historial\n")
+            file.write("Tablafinal\n")
+            file.write(CadenaGuardar + "\n")
+            file.close()
+            print(SymbolT.get_string())
 
-        print('debug')
 
     def getValue(self,newVal,Type):
         #se evalua que el tipo que viene sea valido

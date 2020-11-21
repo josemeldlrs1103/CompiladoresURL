@@ -16,4 +16,4 @@ while True:
         else:
             print('El archivo no cuenta con errores lexicos.')
             ascentParser.ascentParser(TokensTab)
-            semanticTS.semanticTS(TokensTab)
+            semanticTS.semanticTS(TokensTab,Text)
