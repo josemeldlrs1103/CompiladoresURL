@@ -1,0 +1,17 @@
+void main( int holahola ) { 
+int mundo; 
+double Auxiliar;
+mundo = 3 + 4 +2;
+Auxiliar = 4.4*2.3;
+}
+
+bool yaMeAburri ( int compila ) {
+bool ganamoscompis;
+ganamoscompis = true;
+return ganamoscompis;
+}
+double funcionDecimal( double vamonos ) {
+vamonos = 2.8*2.3;
+
+return vamonos;
+}

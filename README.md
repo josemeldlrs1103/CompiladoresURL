@@ -1,36 +1,16 @@
-# CompiladoresURL
-Se implementó un escáner léxico basado en el lenguaje mini c#.
-## Guía de uso 📋
-Al iniciar el ejecutable "Fase1.exe" se abre una consola en la que se solicita la dirección del archivo con el texto a analizar, al terminar el análisis el programa crea un archivo con extensión ".out" en la misma ubicación y con el mismo nombre que el archivo de entrada.
-## Implementación
-El compilador de mini c# se implementó usando el lenguaje Python, el programa funciona de manera que al leer las lineas del archivo de entrada letra por letra se reconocen distintos tokens por medio de expresiones regulares
-### Expresiones regulares utilizadas:
-#### ● Para reconocimiento de Palabras Reservadas:
-        Reservadas1 = r'^(void|int|double|bool|string|class|const|null|this|for|while|if|else|return|New|Console|Writeline)$'
-        Reservadas2 = r'^(interface|foreach|NewArray)$'
-#### ● Para reconocimiento de identificadores:
-        Identificadores = r'^([a-z]|[A-Z])(([a-z]|[A-Z])|[0-9]|_){0,30}$'
-#### ● Para reconocimiento de Enteros:
-        Enteros = r'^((0(x|X)([0-9]|[a-f]|[A-F])+)|([0-9]+))$'
-        TempHex = r'^0(x|X)$'
-#### ● Para reconocimiento de Double:
-        Double = r'^(([0-9]+\.[0-9]*(e|E)(\+|-)?[0-9]+)|([0-9]+\.[0-9]*))$'
-        TempDouble = r'^[0-9]+\.[0-9]*(e|E)$'
-#### ● Para reconocimiento de Parentesis:
-        ERParentesis = r'\([^()]*\)'
-#### ● Para reconocimiento de Corchetes:
-        ERCorchetes = r'\[[^()]*\]'
-#### ● Para reconocimiento de Strings:
-        StringStep1 =r'^\"[^\"]*$'
-        StringStep2 = r'^\"[^\"]*\"$'
-#### ● Para reconocimiento de Comentarios:
-        OneLineCommentsStep2 = r'^\/\/.*$'
-        MultiLineCommentsStep1 = r'^\/\*[^\*\/]*$'
-        MultiLineCommentsStep2 = r'^\/\*[^\*\/]*\*$'
-        MultiLineCommentsStep3 = r'^\/\*[^\*\/]*\*\/$'
-        ExtraCaseComment = r'^\/\*(.)*$'
-## Autores
-* **José Fernando Oliva Morales 1251518**
-* **José Eduardo Meléndez De la Rosa 1059918**
-
+# CompiladoresURL.
+Se implementó un escáner semántico basado en c# basado en el lenguaje mini c#.
+## Descripción tabla de símbolos📖
+para la tabla de símbolos se implemento un tipo de dato abtracto en el que se almacena el nombre, tipo de dato y valor de las variables declaradas, así como el número de línea y rango de columnas en las que se encuentra escrita dentro del archivo, y agregando cada uno a una lista "Tabla de símbolos".
+El valor de las variables se calcula utilizando los elementos de la lista que se encuentra en la misma linea, se utiliza el símbolo como indicador de la variable en la que se debe almacenar el valor una vez se han realizado todas las operaciones en la línea, considerando y respetando la compatibilidad entre los tipos de dato.
+## Manejo de errores  ⚠️
+Si durante el proceso de cálculo del valor se encuentra que los valores de las variables a operar no son compatibles se reporta dentro del historial que se lleva de las variables de la tabla de símbolos.
+## Consideraciones Generales 🛑
+Para la ejecucción correcta los archivos "LRTable.txt" y "ProductionRules.txt" deben estar en la misma carpeta que el ejecutable.
+Al terminar la ejecución el programa escribe un archivo con las tablas generadas en la misma ubicación que el archivo original ingresado.
+## Librería para apoyo visual 👀
+Al imprimir la tabla del historial de la tabla de símbolos y la tabla de símbolos se utilizó una librería externa que ayuda con la impresión en forma de tabla en su representación ascii    **Link al sitio de la librería utilizada** [Pretty table](https://pypi.org/project/prettytable/)
+## Autores ✒️
+* **José Fernando Oliva Morales 1251518** [feroliv4z](https://github.com/feroliv4z)
+* **José Eduardo Meléndez De la Rosa 1059918** [josemel1103](https://github.com/josemeldlrs1103)
 
