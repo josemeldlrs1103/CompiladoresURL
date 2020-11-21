@@ -96,52 +96,50 @@ class semanticTS:
             previousP = previous
             previous = element
         if TS is not None:
-            #Creación de la clase para impresión de lista
-            from prettytable import PrettyTable
-            SymbolT = PrettyTable()
-            Historial = PrettyTable()
+            SymbolT = []
+            Historial = []
             #Definición de los campos de la tabla
-            SymbolT.field_names = ["Nombre","Tipo","Valor","Linea","Espacio columna"]
-            Historial.field_names = ["Nombre","Tipo","Valor","Linea","Espacio Columna"]
+            SymbolT.append("Nombre|Tipo|Valor|Linea|Espacio columna")
+            Historial.append("Nombre|Tipo|Valor|Linea|Espacio columna")
             #agregando las líneas a imprimir en la tabla
             for Variable in TS:
                 if (Variable.Const == True):
                     NuevoTipo = "Const"+Variable.Type
                     if (Variable.Value != None):
-                        SymbolT.add_rows([[Variable.Name, NuevoTipo, Variable.Value, Variable.Line,Variable.Column]])
+                        SymbolT.append(str(Variable.Name)+"|"+ str(NuevoTipo)+"|"+ str(Variable.Value)+"|"+ str(Variable.Line)+"|"+str(Variable.Column))
                     else:
-                        SymbolT.add_rows([[Variable.Name, NuevoTipo, "Null", Variable.Line,Variable.Column]])
+                        SymbolT.append(str(Variable.Name)+"|"+ str(NuevoTipo)+"|"+ "Null"+"|"+ str(Variable.Line)+"|"+str(Variable.Column))
                 else:
                     if (Variable.Value != None):
-                        SymbolT.add_rows([[Variable.Name, Variable.Type, Variable.Value, Variable.Line,Variable.Column]])
+                        SymbolT.append(str(Variable.Name)+"|"+ str(Variable.Type)+"|"+ str(Variable.Value)+"|"+ str(Variable.Line)+"|"+str(Variable.Column))
                     else:
-                         SymbolT.add_rows([[Variable.Name, Variable.Type, "Null", Variable.Line,Variable.Column]])
+                        SymbolT.append(str(Variable.Name)+"|"+ str(Variable.Type)+"|"+ "Null"+"|"+ str(Variable.Line)+"|"+str(Variable.Column))
             for Registro in TSLog:
                 if (Registro.Const == True):
                     NuevoTipo = "Const"+Registro.Type
                     if (Registro.Value != None):
-                        Historial.add_rows([[Registro.Name, NuevoTipo, Registro.Value, Registro.Line,Registro.Column]])
+                        Historial.append(str(Registro.Name)+"|"+ str(NuevoTipo)+"|"+ str(Registro.Value)+"|"+ str(Registro.Line)+"|"+str(Registro.Column))
                     else:
-                        Historial.add_rows([[Registro.Name, Registro, "Null", Registro.Line,Registro.Column]])
+                        Historial.append(str(Registro.Name)+"|"+ str(Registro)+"|"+ "Null"+"|"+ str(Registro.Line)+"|"+str(Registro.Column))
                 else:
                     if (Registro.Value != None):
-                        Historial.add_rows([[Registro.Name, Registro.Type, Registro.Value, Registro.Line,Registro.Column]])
+                        Historial.append(str(Registro.Name)+"|"+ str(Registro.Type)+"|"+ str(Registro.Value)+"|"+ str(Registro.Line)+"|"+str(Registro.Column))
                     else:
-                         Historial.add_rows([[Registro.Name, Registro.Type, "Null", Registro.Line,Registro.Column]])
-            CadenaGuardar = SymbolT.get_string()
-            CadenaHistorial= Historial.get_string()
+                         Historial.append(str(Registro.Name)+"|"+ str(Registro.Type)+"|"+ "Null"+"|"+ str(Registro.Line)+"|"+str(Registro.Column))
             file = open(os.path.splitext(Texto)[0] + ".out", "w")
-            file.write("Historial\n")
-            file.write(CadenaHistorial+"\n")
+            file.write("----------Historial----------\n")
+            for linea in Historial:
+                file.write(linea+"\n")
             if(errors is not None):
                 for er in errors:
                     file.write(er + "\n")
-            file.write("Tablafinal\n")
-            file.write(CadenaGuardar + "\n")
-           
+            file.write("----------Tablafinal----------\n")
+            for linea in SymbolT:
+                file.write(linea+"\n")
             file.close()
             print('La tabla de simbolos obtenida es la siguiente:\n')
-            print(SymbolT.get_string())
+            for linea in SymbolT:
+                print(linea+"\n")
 
 
     def getValue(self,newVal,Type):
