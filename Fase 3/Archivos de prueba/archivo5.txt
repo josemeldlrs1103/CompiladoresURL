@@ -1,0 +1,12 @@
+void main( int holahola ) { 
+int mundo; 
+double Auxiliar;
+mundo = 3 + 4 +2;
+Auxiliar = 4.4*2.3;
+}
+
+string yaMeAburri ( int compila ) {
+string ganamoscompis;
+ganamoscompis = "con buena nota";
+return ganamoscompis;
+}

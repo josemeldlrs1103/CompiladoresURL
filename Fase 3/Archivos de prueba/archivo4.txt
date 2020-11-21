@@ -3,12 +3,10 @@ class Parser : analyzer , lexical, syntactical
     int a1;
 
     int f1(int a, int b, int c) {
-        {
                        int p1;
         if (a<b) p1=2; else p1=3;
 
-        }
-    return (p1) ;
+    return p1 ;
     }
 
     void proc1(double y)

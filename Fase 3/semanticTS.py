@@ -12,6 +12,7 @@ class semanticTS:
         toMod = None
         funcToMod = None
         newVal = []
+        valFunc = []
         ableToSearch = ['int','double','bool','string','const']
         ##se añaden todos los tokens a la la TS
         Const = False
@@ -30,9 +31,12 @@ class semanticTS:
                     if (previous.Name in ableToSearch):
                         # se obtiene el nombre del simbolo al que se modificara su valor
                         toMod = previous.Name
-            #elif (element.Token in tokensAndCons.TKN_PAREN_L and previous is not None):
-             #   if (previous.Token in tokensAndCons.TKN_IDENTIFIER and previousP.Token in tokensAndCons.AbleToTS):
-              #      funcToMod = previous.Name
+                elif ((element.Token in tokensAndCons.TKN_PAREN_L) and (previous.Token in tokensAndCons.TKN_IDENTIFIER) and (previousP.Token in tokensAndCons.AbleToTS)):
+                    funcToMod = previous.Name
+                    
+                elif ((previous.Token in tokensAndCons.TKN_RETURN) and (element.Token in ableToSearch)):
+                    valFunc.append(element.Token)
+
             elif ((toMod is not None) and (element.Token not in tokensAndCons.TKN_SEMICOLON)):
                 #se concatena el nuevo valor hasta encontrar un punto y coma
                 if(element.Name in ableToSearch):
@@ -50,6 +54,23 @@ class semanticTS:
                         i+=1
                 else:
                     newVal.append(element.Value)
+            elif ((funcToMod is not None) and (previous.Token in tokensAndCons.TKN_RETURN)):
+                #se busca el simbolo a modificar
+                i = 0
+                valorValor = None
+                while (valorValor is None and i< len(TS)):
+                    if(TS[i].Name == element.Name):
+                        valorValor = self.getValue(TS[i].Value, TS[i].Type)
+                    i += 1
+                i = 0
+                while (funcToMod is not None) and  i < len(TS):
+                    if(TS[i].Name == funcToMod and TS[i].Mod == 1):
+                        #se obtiene el valor para dicho simbolo
+                        TS[i].Value = 'La función retorna: ' + self.getValue(valorValor, TS[i].Type)
+                        TSLog.append(TS[i])
+                        funcToMod = None
+                        valFunc =[]
+                    i+=1
             elif ((toMod is not None) and (element.Token in tokensAndCons.TKN_SEMICOLON)):
                 #se busca el simbolo a modificar
                 i = 0
@@ -159,99 +180,114 @@ class semanticTS:
                             errors.append('Error de tipos en variable, se trató de emparejar ' + str(Type) +' y ' +str(self.getTypeForVal(item)))
                             return 'Error de tipos en variable, se trató de emparejar ' + str(Type) +' y ' +str(self.getTypeForVal(item))
             return str(toBack)
-        elif (Type == 'double'  and '.' in newVal[0]):
-            toBack = 0
-            toDo = ''
-            for item in newVal:
-                if (toDo == ''):
-                    if(item == '+' or item == '-' or item == '*' or item == '/' or item == '%'):
-                        toDo = item
-                    else:
-                        toBack += float(item)
-                else:
-                    # se permite sumar un float y un int para los datos double
-                    if('.' in item or item.isnumeric()):
-                        if (toDo == '+'):
-                            toDo = ''
-                            toBack += float(item)
-                        elif(toDo == '-'):
-                            toDo = ''
-                            toBack -= float(item)
-                        elif(toDo == '*'):
-                            toDo = ''
-                            toBack *= float(item)
-                        elif(toDo == '/'):
-                            toDo = ''
-                            toBack /= float(item)
-                        elif(toDo == '%'):
-                            toDo = ''
-                            toBack %= float(item)
+        elif (Type == 'double'):
+            if( '.' in newVal[0]):
+                toBack = 0
+                toDo = ''
+                if(type(newVal) is list):
+                    for item in newVal:
+                        if (toDo == ''):
+                            if(item == '+' or item == '-' or item == '*' or item == '/' or item == '%'):
+                                toDo = item
+                            else:
+                                toBack += float(item)
                         else:
-                            errors.append('Se encontró un operador no valido para double: ' + str(toDo))
-                            return 'Se encontró un operador no valido para double: ' + str(toDo)
-                    else:
-                        errors.append('Error de tipos en variable, se trató de emparejar ' + str(Type) +' y ' +str(self.getTypeForVal(item)))
-                        return 'Error de tipos en variable, se trató de emparejar ' + str(Type) +' y ' +str(self.getTypeForVal(item))
+                            # se permite sumar un float y un int para los datos double
+                            if('.' in item or item.isnumeric()):
+                                if (toDo == '+'):
+                                    toDo = ''
+                                    toBack += float(item)
+                                elif(toDo == '-'):
+                                    toDo = ''
+                                    toBack -= float(item)
+                                elif(toDo == '*'):
+                                    toDo = ''
+                                    toBack *= float(item)
+                                elif(toDo == '/'):
+                                    toDo = ''
+                                    toBack /= float(item)
+                                elif(toDo == '%'):
+                                    toDo = ''
+                                    toBack %= float(item)
+                                else:
+                                    errors.append('Se encontró un operador no valido para double: ' + str(toDo))
+                                    return 'Se encontró un operador no valido para double: ' + str(toDo)
+                            else:
+                                errors.append('Error de tipos en variable, se trató de emparejar ' + str(Type) +' y ' +str(self.getTypeForVal(item)))
+                                return 'Error de tipos en variable, se trató de emparejar ' + str(Type) +' y ' +str(self.getTypeForVal(item))
+                else:
+                    toBack = float(newVal)
+            else:
+                toBack = float(newVal)
             return str(toBack)
         elif (Type == 'bool'):
-            if (newVal[0] == 'false' or newVal[0] == 'true' or newVal[0] == 'null'):
-                toBack = ''
-                toDo = ''
-                for item in newVal:
-                    if (toDo == ''):
-                        if(item == '&&' or item == '||' or item == '!'):
-                            toDo = item
-                        else:
-                            toBack += item
-                    elif(item == 'false' or item == 'true'):
-                        if(toDo =='&&'):
-                            if toBack == item:
-                                toDo = ''
-                                toBack = 'true'
-                            else: 
-                                toDo = ''
-                                toBack = 'false'
-                        elif(toDo =='||'):
-                            if (toBack == 'true' or item == 'true'):
-                                toDo = ''
-                                toBack = 'true'
-                            else: 
-                                toDo = ''
-                                toBack = 'false'
-                        elif(toDo =='!'):
-                            if(item == 'true'):
-                                toDo =''
-                                toBack = 'false'
-                            elif(item == 'false'):
-                                toDo =''
-                                toBack = 'true'
+            toBack = ''
+            toDo = ''
+            if(type(newVal) is list):
+                if (newVal[0] == 'false' or newVal[0] == 'true' or newVal[0] == 'null'):
+                    for item in newVal:
+                        if (toDo == ''):
+                            if(item == '&&' or item == '||' or item == '!'):
+                                toDo = item
                             else:
-                                return 'la negación no es valida'
-                        else:
-                            errors.append('Se encontró un operador no valido para bool: ' + str(toDo))
-                            return 'Se encontró un operador no valido para bool: ' + str(toDo)
-                    elif(item == 'null'):
-                        toDo = ''
-                        toBack = 'null'
-                return toBack
+                                toBack += item
+                        elif(item == 'false' or item == 'true'):
+                            if(toDo =='&&'):
+                                if toBack == item:
+                                    toDo = ''
+                                    toBack = 'true'
+                                else: 
+                                    toDo = ''
+                                    toBack = 'false'
+                            elif(toDo =='||'):
+                                if (toBack == 'true' or item == 'true'):
+                                    toDo = ''
+                                    toBack = 'true'
+                                else: 
+                                    toDo = ''
+                                    toBack = 'false'
+                            elif(toDo =='!'):
+                                if(item == 'true'):
+                                    toDo =''
+                                    toBack = 'false'
+                                elif(item == 'false'):
+                                    toDo =''
+                                    toBack = 'true'
+                                else:
+                                    return 'la negación no es valida'
+                            else:
+                                errors.append('Se encontró un operador no valido para bool: ' + str(toDo))
+                                return 'Se encontró un operador no valido para bool: ' + str(toDo)
+                        elif(item == 'null'):
+                            toDo = ''
+                            toBack = 'null'
+                else:
+                    return 'valor no valido para bool'
             else:
-                return 'valor no valido para bool'
+                toBack += newVal 
+            return toBack
+            
         elif (Type == 'string'  and '"' in newVal[0]):
             toBack = ''
             toDo = ''
-            for item in newVal:
-                if (toDo == ''):
-                    if(item == '+'):
-                        toDo = item 
-                    elif('"' in item):
-                        toDo = ''
-                        toBack+=item
+            if(type(newVal) is list):
+                for item in newVal:
+                    if (toDo == ''):
+                        if(item == '+'):
+                            toDo = item 
+                        elif('"' in item):
+                            toDo = ''
+                            toBack+=item
+                        elif(item.isalpha()):
+                            toBack+=item
+                        else:
+                            errors.append('Se encontró un operador no valido para string: ' + str(toDo))
+                            return 'Se encontró un operador no valido para string: ' + str(toDo)
                     else:
-                        errors.append('Se encontró un operador no valido para string: ' + str(toDo))
-                        return 'Se encontró un operador no valido para string: ' + str(toDo)
-                else:
-                    toDo =''
-                    toBack += item
+                        toDo =''
+                        toBack += item
+            else:
+                toBack += newVal
             return '"'+toBack.replace('"','') + '"'
         else:
             errors.append('Error de tipos en variable, se trató de emparejar ' + str(Type) +' y ' +str(self.getTypeForVal(newVal)))
