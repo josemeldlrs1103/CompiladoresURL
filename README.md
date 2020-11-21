@@ -6,7 +6,8 @@ El valor de las variables se calcula utilizando los elementos de la lista que se
 ## Manejo de errores  ⚠️
 Si durante el proceso de cálculo del valor se encuentra que los valores de las variables a operar no son compatibles se reporta dentro del historial que se lleva de las variables de la tabla de símbolos.
 ## Consideraciones Generales 🛑
-Para la ejecucción correcta los archivos "LRTable.txt" y "ProductionRules.txt" deben estar en la misma carpeta que el ejecutable
+Para la ejecucción correcta los archivos "LRTable.txt" y "ProductionRules.txt" deben estar en la misma carpeta que el ejecutable.
+Al terminar la ejecución el programa escribe un archivo con las tablas generadas en la misma ubicación que el archivo original ingresado.
 ## Librería para apoyo visual 👀
 Al imprimir la tabla del historial de la tabla de símbolos y la tabla de símbolos se utilizó una librería externa que ayuda con la impresión en forma de tabla en su representación ascii    **Link al sitio de la librería utilizada** [Pretty table](https://pypi.org/project/prettytable/)
 ## Autores ✒️
